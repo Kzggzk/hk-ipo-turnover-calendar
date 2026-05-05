@@ -20,10 +20,14 @@ open dist/index.html
 
 `launchd` runs `scripts/refresh-and-publish.sh` on Hong Kong trading weekdays at 02:00 UTC+8. The script:
 
-1. Fetches and validates sources.
-2. Writes `data/latest.json` and `data/history/YYYY-MM-DD.json`.
-3. Builds `dist/index.html`.
-4. Commits and pushes when a Git remote exists.
-5. Leaves the previous site intact if fetching or building fails.
+1. Skips weekends and Hong Kong public holidays before touching data.
+2. Fetches and validates sources.
+3. Writes `data/latest.json` and `data/history/YYYY-MM-DD.json`.
+4. Builds `dist/index.html`.
+5. Commits and pushes when a Git remote exists.
+6. Leaves the previous site intact if fetching or building fails.
+
+The holiday guard currently uses the gazetted 2026 GovHK holiday list:
+https://www.gov.hk/en/about/abouthk/holiday/2026.htm
 
 Netlify should be connected to this GitHub repo with `dist/` as the publish directory. The local Mac refresh and GitHub push path is already active; Netlify Git-based deploy still needs the one-time repo binding in the Netlify dashboard if the site was created by direct deploy first.

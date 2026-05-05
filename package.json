@@ -9,7 +9,7 @@
     "refresh": "scripts/refresh-and-publish.sh --no-push",
     "publish": "scripts/refresh-and-publish.sh",
     "dry-run": "scripts/refresh-and-publish.sh --dry-run",
-    "check": "node --check scripts/fetch-hkipo.mjs && node --check scripts/build-site.mjs"
+    "check": "node --check scripts/fetch-hkipo.mjs && node --check scripts/build-site.mjs && node --check scripts/is-hk-trading-day.mjs"
   },
   "engines": {
     "node": ">=20"

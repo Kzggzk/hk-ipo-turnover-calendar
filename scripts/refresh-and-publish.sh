@@ -46,6 +46,23 @@ if [[ "$DRY_RUN" == "1" ]]; then
   exit 0
 fi
 
+if [[ "${HKIPO_FORCE_RUN:-0}" != "1" ]]; then
+  set +e
+  {
+    echo "Trading-day check at $(date)"
+    node "$ROOT/scripts/is-hk-trading-day.mjs"
+  } > "$log_file" 2>&1
+  trading_check=$?
+  set -e
+  if [[ "$trading_check" == "10" ]]; then
+    echo "Refresh skipped: non-trading day. Log: $log_file"
+    exit 0
+  elif [[ "$trading_check" != "0" ]]; then
+    echo "Refresh failed during trading-day check. Log: $log_file" >&2
+    exit 1
+  fi
+fi
+
 backup="$(mktemp -d /tmp/hk-ipo-site-backup.XXXXXX)"
 cp -p "$ROOT/data/latest.json" "$backup/latest.json" 2>/dev/null || true
 cp -p "$ROOT/dist/index.html" "$backup/index.html" 2>/dev/null || true

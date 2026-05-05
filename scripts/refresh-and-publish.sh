@@ -1,6 +1,8 @@
 #!/bin/zsh
 set -euo pipefail
 
+export PATH="/usr/local/bin:/opt/homebrew/bin:/Users/fangbao/.npm-global/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
 ROOT="/Users/fangbao/hk-ipo-site"
 LOG_DIR="/Users/fangbao/Library/Logs/HKIPORefresh"
 mkdir -p "$LOG_DIR"
@@ -24,11 +26,12 @@ run_refresh() {
     echo "Forced failure via HKIPO_FORCE_FAIL=1"
     return 99
   fi
-  npm run check
-  npm run fetch:hkipo
-  npm run build
-  test -s dist/index.html
-  grep -q "HK IPO Turnover Calendar" dist/index.html
+  command -v npm >/dev/null || return 98
+  npm run check || return $?
+  npm run fetch:hkipo || return $?
+  npm run build || return $?
+  test -s dist/index.html || return $?
+  grep -q "HK IPO Turnover Calendar" dist/index.html || return $?
 }
 
 if [[ "$DRY_RUN" == "1" ]]; then

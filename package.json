@@ -1,0 +1,17 @@
+{
+  "name": "hk-ipo-turnover-calendar",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch:hkipo": "node scripts/fetch-hkipo.mjs",
+    "build": "node scripts/build-site.mjs",
+    "refresh": "scripts/refresh-and-publish.sh --no-push",
+    "publish": "scripts/refresh-and-publish.sh",
+    "dry-run": "scripts/refresh-and-publish.sh --dry-run",
+    "check": "node --check scripts/fetch-hkipo.mjs && node --check scripts/build-site.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

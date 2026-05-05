@@ -2,6 +2,12 @@
 
 Mac-generated, Netlify-hosted static site for Hong Kong IPO cash-turnover planning.
 
+## Live endpoints
+
+- Public site: https://hk-ipo-turnover-calendar.netlify.app/
+- GitHub repo: https://github.com/Kzggzk/hk-ipo-turnover-calendar
+- Netlify project: https://app.netlify.com/projects/hk-ipo-turnover-calendar
+
 ## Local run
 
 ```bash
@@ -20,4 +26,4 @@ open dist/index.html
 4. Commits and pushes when a Git remote exists.
 5. Leaves the previous site intact if fetching or building fails.
 
-Netlify should be connected to this GitHub repo with `dist/` as the publish directory.
+Netlify should be connected to this GitHub repo with `dist/` as the publish directory. The local Mac refresh and GitHub push path is already active; Netlify Git-based deploy still needs the one-time repo binding in the Netlify dashboard if the site was created by direct deploy first.

@@ -66,7 +66,7 @@ async function loadBaseData() {
 
 async function checkSource(source) {
   const startedAt = Date.now();
-  const timeoutMs = Number(process.env.HKIPO_FETCH_TIMEOUT_MS || 60000);
+  const timeoutMs = Number(process.env.HKIPO_FETCH_TIMEOUT_MS || 90000);
   const result = {
     id: source.id,
     name: source.name,

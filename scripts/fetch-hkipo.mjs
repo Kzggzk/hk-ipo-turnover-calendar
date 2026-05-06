@@ -22,11 +22,7 @@ if (process.env.HKIPO_FORCE_FAIL === "1") {
 await mkdir(historyDir, { recursive: true });
 
 const base = await loadBaseData();
-const sourceChecks = [];
-
-for (const source of base.sources || []) {
-  sourceChecks.push(await checkSource(source));
-}
+const sourceChecks = await mapLimit(base.sources || [], Number(process.env.HKIPO_FETCH_CONCURRENCY || 4), checkSource);
 
 const officialPage = sourceChecks.find((s) => s.id === "hkex-new-listings");
 const discoveredOfficialLinks = officialPage?.sampleLinks || [];
@@ -70,6 +66,7 @@ async function loadBaseData() {
 
 async function checkSource(source) {
   const startedAt = Date.now();
+  const timeoutMs = Number(process.env.HKIPO_FETCH_TIMEOUT_MS || 60000);
   const result = {
     id: source.id,
     name: source.name,
@@ -85,9 +82,10 @@ async function checkSource(source) {
     error: null
   };
 
+  let timeout;
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 25000);
+    timeout = setTimeout(() => controller.abort(), timeoutMs);
     const response = await fetch(source.url, {
       redirect: "follow",
       signal: controller.signal,
@@ -95,7 +93,6 @@ async function checkSource(source) {
         "user-agent": "Mozilla/5.0 HKIPOTurnoverCalendar/0.1 (+public-source-check)"
       }
     });
-    clearTimeout(timeout);
     result.httpStatus = response.status;
     result.contentType = response.headers.get("content-type");
     const arrayBuffer = await response.arrayBuffer();
@@ -110,10 +107,25 @@ async function checkSource(source) {
   } catch (error) {
     result.error = error instanceof Error ? error.message : String(error);
   } finally {
+    if (timeout) clearTimeout(timeout);
     result.elapsedMs = Date.now() - startedAt;
   }
 
   return result;
+}
+
+async function mapLimit(items, limit, mapper) {
+  const output = new Array(items.length);
+  let index = 0;
+  const workers = Array.from({ length: Math.max(1, Math.min(limit, items.length || 1)) }, async () => {
+    while (index < items.length) {
+      const current = index;
+      index += 1;
+      output[current] = await mapper(items[current], current);
+    }
+  });
+  await Promise.all(workers);
+  return output;
 }
 
 function extractHKEXLinks(html) {

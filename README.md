@@ -18,7 +18,7 @@ open dist/index.html
 
 ## Production flow
 
-`launchd` runs `scripts/refresh-and-publish.sh` on Hong Kong trading weekdays at 02:00 UTC+8. The script:
+`launchd` runs `scripts/refresh-and-publish.sh` on Hong Kong trading weekdays at 03:00 UTC+8. The script:
 
 1. Skips weekends and Hong Kong public holidays before touching data.
 2. Fetches and validates sources.

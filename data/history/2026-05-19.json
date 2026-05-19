@@ -7,7 +7,7 @@
     "coverageEnd": "2026-06-18",
     "asOfDate": "2026-05-19",
     "asOfTime": "22:30",
-    "fetchedAt": "2026-05-19T22:43:44+08:00",
+    "fetchedAt": "2026-05-19T23:20:44+08:00",
     "runDate": "2026-05-19",
     "dataStatus": "verified-refresh",
     "coverageLabel": "2026-05-19 to 2026-06-18",
@@ -590,13 +590,13 @@
       "name": "DBS IPO Shares Subscription Service",
       "priority": 1,
       "url": "https://www.hk.dbs.com/ecportalweb/ipo/IPO.aspx?Lang=en-us",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "bytes": 46459,
-      "elapsedMs": 873,
+      "elapsedMs": 653,
       "error": null
     },
     {
@@ -604,13 +604,13 @@
       "name": "HKEX 03310 Viewtrix prospectus",
       "priority": 1,
       "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0518/2026051800022_c.pdf",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "application/pdf",
       "bytes": 4845315,
-      "elapsedMs": 1380,
+      "elapsedMs": 1263,
       "error": null
     },
     {
@@ -618,13 +618,13 @@
       "name": "HKEX 02723 DeepZero prospectus",
       "priority": 1,
       "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0518/2026051800024_c.pdf",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "application/pdf",
       "bytes": 8429791,
-      "elapsedMs": 1463,
+      "elapsedMs": 1367,
       "error": null
     },
     {
@@ -632,13 +632,13 @@
       "name": "HKEX 06872 TenNor global offering announcement",
       "priority": 1,
       "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0514/2026051400003.pdf",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "application/pdf",
       "bytes": 198424,
-      "elapsedMs": 833,
+      "elapsedMs": 841,
       "error": null
     },
     {
@@ -646,13 +646,13 @@
       "name": "etnet 03310 IPO info",
       "priority": 2,
       "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=3310",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "bytes": 414474,
-      "elapsedMs": 1209,
+      "bytes": 414921,
+      "elapsedMs": 1254,
       "error": null
     },
     {
@@ -660,13 +660,13 @@
       "name": "etnet 02723 IPO info",
       "priority": 2,
       "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=2723",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "bytes": 411008,
-      "elapsedMs": 1151,
+      "bytes": 411569,
+      "elapsedMs": 2097,
       "error": null
     },
     {
@@ -674,13 +674,13 @@
       "name": "etnet 00901 IPO info",
       "priority": 2,
       "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=901",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
-      "bytes": 413915,
-      "elapsedMs": 1109,
+      "bytes": 412483,
+      "elapsedMs": 5494,
       "error": null
     },
     {
@@ -688,13 +688,13 @@
       "name": "AASTOCKS IPO Plus",
       "priority": 2,
       "url": "https://www.aastocks.com/en/stocks/market/ipo/upcomingipo/company-news?symbol=02621",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "bytes": 184882,
-      "elapsedMs": 1460,
+      "elapsedMs": 6361,
       "error": null
     },
     {
@@ -702,13 +702,13 @@
       "name": "JPM/AASTOCKS May 19 grey-market news feed",
       "priority": 3,
       "url": "https://jpmhkwarrants.com/en_hk/ajax/newsfeed-result/newsID/40365/scategory/hongkong/page/",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "bytes": 32352,
-      "elapsedMs": 5748,
+      "elapsedMs": 10159,
       "error": null
     },
     {
@@ -716,13 +716,13 @@
       "name": "JRJ May 19 HK IPO activity note",
       "priority": 3,
       "url": "https://24h.jrj.com.cn/2026/05/19063257133355.shtml",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "text/html; charset=utf-8",
       "bytes": 23067,
-      "elapsedMs": 113,
+      "elapsedMs": 363,
       "error": null
     },
     {
@@ -730,13 +730,13 @@
       "name": "GovHK 2026 public holidays",
       "priority": 2,
       "url": "https://www.gov.hk/en/about/abouthk/holiday/2026.htm",
-      "fetchedAt": "2026-05-19T22:43:44+08:00",
+      "fetchedAt": "2026-05-19T23:20:44+08:00",
       "ok": true,
       "status": "verified",
       "httpStatus": 200,
       "contentType": "text/html; charset=UTF-8",
       "bytes": 85362,
-      "elapsedMs": 423,
+      "elapsedMs": 3409,
       "error": null
     }
   ],
@@ -744,7 +744,7 @@
     "sourceCount": 11,
     "okSourceCount": 11,
     "failedSourceCount": 0,
-    "fetchedAt": "2026-05-19T22:43:44+08:00"
+    "fetchedAt": "2026-05-19T23:20:44+08:00"
   },
   "discoveredOfficialLinks": []
 }

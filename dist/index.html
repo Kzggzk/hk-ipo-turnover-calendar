@@ -7,250 +7,250 @@
   <title>港股打新资金接力日历 | HK IPO Turnover Calendar</title>
   <style>
     :root{
+      color-scheme:light;
+      --bg:#f6f7f8;--page:#ffffff;--card:#ffffff;--soft:#f0f3f5;
+      --text:#172027;--muted:#66737d;--line:#dfe5e9;--line2:#cfd8df;
+      --blue:#3f7dd7;--purple:#8c5cc3;--green:#4b9a5a;--orange:#e68a2f;--red:#c4584f;
+      --shadow:0 14px 34px rgba(29,43,54,.08);--radius:18px;
+    }
+    body.dark{
       color-scheme:dark;
-      --bg:#080b0d;--panel:#0e1417;--panel2:#111b20;--panel3:#16242a;
-      --line:#27363d;--line2:#3f535d;--text:#edf5f7;--muted:#8fa2ab;
-      --cyan:#32d5ff;--cyan2:#0e7f9c;--amber:#ffbf3d;--green:#21d07a;--red:#ff5b5b;
-      --blue:#4f7cff;--gray:#5f6b73;--black:#050708;
-      --day:54px;--row:58px;--name:220px;
+      --bg:#0d1114;--page:#11181d;--card:#151e24;--soft:#1b252b;
+      --text:#eef4f6;--muted:#9aa8b1;--line:#2b3942;--line2:#42525d;
+      --blue:#6fa3ff;--purple:#b58aff;--green:#74c885;--orange:#f0a456;--red:#ef8178;
+      --shadow:0 18px 42px rgba(0,0,0,.24);
     }
     *{box-sizing:border-box}
     html,body{max-width:100%;overflow-x:hidden}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-size:12px;line-height:1.42;letter-spacing:0}
-    a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
-    .app{max-width:1720px;margin:0 auto;padding:10px 10px 28px}
-    .terminal{border:1px solid var(--line2);background:linear-gradient(180deg,#0b1114 0%,#080b0d 100%);box-shadow:0 0 0 1px rgba(255,255,255,.02) inset}
-    .topbar{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;padding:11px 12px;border-bottom:1px solid var(--line2)}
-    h1{margin:0;font-size:24px;line-height:1;font-weight:820;letter-spacing:0;color:#fff}
-    h2{margin:0;font-size:13px;line-height:1.2;font-weight:760;text-transform:uppercase;color:#dceff3}
-    h3{margin:0;font-size:12px;line-height:1.2;font-weight:760}
-    .ticker{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-    .pill{display:inline-flex;align-items:center;gap:5px;min-height:22px;border:1px solid var(--line2);background:var(--panel2);padding:3px 7px;color:var(--muted);white-space:normal;max-width:100%;overflow-wrap:anywhere}
-    .pill.hot{border-color:rgba(50,213,255,.65);color:var(--cyan);background:rgba(50,213,255,.08)}
-    .pill.warn{border-color:rgba(255,191,61,.65);color:var(--amber);background:rgba(255,191,61,.08)}
-    .pill.red{border-color:rgba(255,91,91,.7);color:#ffb0b0;background:rgba(255,91,91,.09)}
-    .status{text-align:right;color:var(--muted);font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
-    .status b{display:block;color:var(--cyan);font-size:16px;line-height:1.2}
-    .decision{display:grid;grid-template-columns:1.35fr .65fr;border-bottom:1px solid var(--line2)}
-    .decision-main,.decision-side{padding:12px;border-right:1px solid var(--line2);background:var(--panel)}
-    .decision-side{border-right:0;background:linear-gradient(180deg,rgba(255,191,61,.10),rgba(255,91,91,.07))}
-    .decision b{display:block;margin-bottom:5px;color:#fff;font-size:14px}
-    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--line2)}
-    .kpi{padding:10px 12px;border-right:1px solid var(--line);min-height:76px;background:#0c1215}
-    .kpi:last-child{border-right:0}
-    .label{font-size:10px;text-transform:uppercase;color:var(--muted);font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
-    .value{font-size:23px;font-weight:840;line-height:1.05;margin-top:4px;color:#fff;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
-    .note{margin-top:4px;color:var(--muted)}
-    .grid{display:grid;grid-template-columns:1fr 392px;gap:10px;padding:10px}
-    .panel{border:1px solid var(--line2);background:var(--panel)}
-    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line2);background:var(--panel2)}
-    .panel-body{padding:10px}
-    .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
-    .day{min-height:112px;padding:7px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#0b1114;position:relative;overflow:hidden}
-    .day.weekend,.day.holiday{background:#090d10;color:var(--gray)}
-    .day.today{outline:2px solid var(--cyan);outline-offset:-2px;background:#0f1d22}
-    .date{display:flex;justify-content:space-between;gap:6px;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace;color:#e9f4f6;font-weight:760}
-    .dow{color:var(--muted);font-weight:520}
-    .event{margin-top:5px;border-left:3px solid var(--line2);padding:3px 5px;background:rgba(255,255,255,.035);font-size:11px}
-    .event.deadline{border-color:var(--red)}
-    .event.broker{border-color:var(--amber)}
-    .event.result{border-color:var(--cyan)}
-    .event.refund{border-color:var(--green)}
-    .event.listing{border-color:var(--blue)}
-    .event.watch{border-color:var(--gray);color:var(--muted)}
-    .timeline{overflow-x:auto;border-top:1px solid var(--line)}
-    .tl-grid{min-width:calc(31 * var(--day) + var(--name));display:grid;grid-template-columns:var(--name) repeat(31,var(--day))}
-    .tl-cell{height:31px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 6px;background:#0b1114;color:var(--muted);font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
-    .tl-head{height:38px;background:#10191d;color:#d9edf1;font-weight:780}
-    .tl-name{position:sticky;left:0;z-index:3;background:#10191d;color:#fff;border-right:1px solid var(--line2);font-family:inherit}
-    .tl-row-name{height:var(--row);display:block;padding:8px 9px}
-    .tl-row-name strong{display:block;font-size:16px;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
-    .tl-row-name span{display:block;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .bar-row{height:var(--row);position:relative;display:grid;grid-template-columns:repeat(31,var(--day));border-bottom:1px solid var(--line);grid-column:2/-1;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(var(--day) - 1px),var(--line) calc(var(--day) - 1px),var(--line) var(--day))}
-    .bar{align-self:center;height:28px;border:1px solid var(--line2);background:#17262c;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 8px;overflow:hidden;white-space:nowrap;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
-    .bar.open{border-color:var(--cyan);background:rgba(50,213,255,.12);color:#c9f6ff}
-    .bar.closed{border-color:var(--amber);background:rgba(255,191,61,.10);color:#ffe5a7}
-    .bar.to-list{border-color:var(--blue);background:rgba(79,124,255,.11);color:#d3dcff}
-    .bar.listed-reference{border-color:var(--gray);background:rgba(95,107,115,.10);color:#a6b4bb}
-    .marker{align-self:end;margin-bottom:3px;justify-self:center;z-index:2;min-width:20px;text-align:center;border:1px solid var(--line2);background:#0a0f12;color:#dfeef2;font-size:10px;line-height:14px;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
-    .marker.broker{border-color:var(--amber);color:var(--amber)}
-    .marker.official{border-color:var(--red);color:#ffb4b4}
-    .marker.result{border-color:var(--cyan);color:var(--cyan)}
-    .marker.refund{border-color:var(--green);color:var(--green)}
-    .marker.listing{border-color:var(--blue);color:#bfd0ff}
-    .score-list{display:grid;gap:8px}
-    .score-card{border:1px solid var(--line);background:#0b1114;padding:9px}
-    .score-top{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
-    .score-code{font-size:15px;font-weight:830;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace;color:#fff}
-    .score-num{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--cyan);background:rgba(50,213,255,.10);font-size:22px;font-weight:840;color:var(--cyan);font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
-    .score-num.high{border-color:var(--green);color:var(--green);background:rgba(33,208,122,.10)}
-    .score-num.mid{border-color:var(--amber);color:var(--amber);background:rgba(255,191,61,.10)}
-    .score-num.low{border-color:var(--gray);color:#b2bdc3;background:rgba(95,107,115,.10)}
-    .brief{color:var(--muted);margin-top:5px}
-    .meters{display:grid;gap:4px;margin-top:8px}
-    .meter{display:grid;grid-template-columns:64px 1fr 25px;gap:6px;align-items:center;color:var(--muted);font-size:10px}
-    .track{height:7px;border:1px solid var(--line2);background:#080c0f}
-    .fill{display:block;height:100%;background:var(--cyan)}
-    .conflicts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-    .conflict{border:1px solid var(--line2);background:#0b1114;padding:10px;min-height:128px}
-    .conflict.hard{border-color:rgba(255,91,91,.72);background:rgba(255,91,91,.07)}
-    .conflict.tight{border-color:rgba(255,191,61,.72);background:rgba(255,191,61,.07)}
-    .conflict.same{border-color:rgba(50,213,255,.62);background:rgba(50,213,255,.06)}
-    .conflict b{display:block;margin:7px 0;color:#fff;font-size:15px}
-    table{width:100%;border-collapse:collapse}
-    th,td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
-    th{background:#10191d;color:#dceff3;font-weight:760}
-    td{background:#0b1114;color:#cdd9dd}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-size:14px;line-height:1.45;letter-spacing:0}
+    a{color:inherit}
+    .app{max-width:1480px;margin:0 auto;padding:16px}
+    .shell{min-height:calc(100vh - 32px);border:1px solid var(--line);border-radius:26px;background:var(--page);box-shadow:var(--shadow);padding:26px}
+    .top{display:grid;grid-template-columns:1fr auto auto;gap:18px;align-items:start;margin-bottom:24px}
+    h1{font-size:26px;line-height:1.05;margin:0;font-weight:780}
+    .subtitle{margin-top:7px;color:var(--muted);font-size:15px}
+    .controls{display:flex;gap:10px;align-items:center;justify-content:center}
+    .seg,.stamp{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;background:var(--soft);padding:8px 10px;color:var(--muted);white-space:nowrap}
+    button{border:0;background:transparent;color:var(--muted);border-radius:999px;padding:7px 11px;font:inherit;cursor:pointer}
+    button.active{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+    .stamp{padding:11px 16px;font-size:13px}
+    .timeline-card{border:1px solid var(--line);border-radius:24px;background:var(--card);padding:28px 24px 24px;position:relative}
+    .microcopy{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;color:var(--muted);font-size:13px}
+    .microcopy span{border:1px solid var(--line);border-radius:999px;background:var(--soft);padding:7px 11px}
+    .timeline-wrap{overflow-x:auto;overflow-y:visible;padding:8px 4px 24px;scrollbar-width:thin}
+    .timeline{min-width:1180px;position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:16px;align-items:stretch}
+    .timeline:before{content:"";position:absolute;left:34px;right:34px;top:66px;height:2px;background:var(--line2)}
+    .timeline:after{content:"";position:absolute;right:28px;top:61px;border-left:10px solid var(--line2);border-top:6px solid transparent;border-bottom:6px solid transparent}
+    .ipo{position:relative;z-index:2}
+    .ipo:hover{z-index:50}
+    .ipo-card{position:relative;border:1px solid var(--line2);border-radius:18px;background:linear-gradient(180deg,var(--card),var(--soft));padding:16px 14px;text-align:left;min-height:190px;cursor:default;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+    .ipo-card:hover{transform:translateY(-4px);border-color:var(--blue);box-shadow:var(--shadow)}
+    .code{font-size:17px;font-weight:760;font-variant-numeric:tabular-nums}
+    .name{margin-top:7px;font-weight:700}
+    .ename{margin-top:2px;color:var(--muted);font-size:12px}
+    .score-chip{position:absolute;right:10px;top:10px;color:var(--muted);font-size:12px}
+    .mini{display:grid;gap:9px;margin-top:18px}
+    .mini-row{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--card) 70%,transparent);padding:9px 10px}
+    .mini-k{color:var(--muted);font-size:12px}
+    .mini-v{font-weight:760;font-variant-numeric:tabular-nums}
+    .verdict{margin-top:10px;border-radius:12px;padding:10px 11px;font-weight:700;font-size:13px}
+    .verdict.good{color:var(--green);background:color-mix(in srgb,var(--green) 10%,var(--card))}
+    .verdict.bad{color:var(--red);background:color-mix(in srgb,var(--red) 10%,var(--card))}
+    .verdict.warn{color:var(--orange);background:color-mix(in srgb,var(--orange) 12%,var(--card))}
+    .tooltip{position:absolute;left:100%;top:0;z-index:30;width:390px;max-width:calc(100vw - 48px);transform:translateX(12px) translateY(8px);opacity:0;pointer-events:none;transition:opacity .14s ease,transform .14s ease;border:1px solid var(--line2);border-radius:18px;background:var(--card);box-shadow:var(--shadow);padding:16px;text-align:left}
+    .ipo-card:hover .tooltip{opacity:1;transform:translateX(12px) translateY(0)}
+    .ipo:nth-last-child(-n+2) .tooltip{left:auto;right:100%;transform:translateX(-12px) translateY(8px)}
+    .ipo:nth-last-child(-n+2) .ipo-card:hover .tooltip{transform:translateX(-12px) translateY(0)}
+    .tip-row{display:grid;grid-template-columns:90px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+    .tip-row:last-child{border-bottom:0}
+    .tip-key{color:var(--muted)}
+    .tip-value{font-weight:620}
+    .tip-value.good{color:var(--green)}.tip-value.bad{color:var(--red)}.tip-value.warn{color:var(--orange)}
+    .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:20px}
+    .summary-card{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:18px;min-height:152px}
+    .summary-card.good{background:color-mix(in srgb,var(--green) 7%,var(--card));border-color:color-mix(in srgb,var(--green) 35%,var(--line))}
+    .summary-card.bad{background:color-mix(in srgb,var(--red) 7%,var(--card));border-color:color-mix(in srgb,var(--red) 35%,var(--line))}
+    .summary-card.same{background:color-mix(in srgb,var(--orange) 9%,var(--card));border-color:color-mix(in srgb,var(--orange) 38%,var(--line))}
+    .summary-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;font-size:18px;font-weight:760}
+    .summary-list{display:grid;gap:8px}
+    .summary-line{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--card) 74%,transparent);padding:8px 10px}
     .muted{color:var(--muted)}
-    .small{font-size:10px}
-    .source-list{margin:0;padding:0;list-style:none;display:grid;gap:5px}
-    .source-list li{display:grid;grid-template-columns:88px 1fr;gap:8px;border-bottom:1px solid var(--line);padding-bottom:5px}
-    .source-status{font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace;color:var(--muted)}
-    .ok{color:var(--green)}.fail{color:var(--red)}
-    .method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-    .method-card{border:1px solid var(--line);background:#0b1114;padding:9px}
-    .method-card b{color:#fff}
-    .watch-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-    .watch-card{border:1px dashed var(--line2);background:#0a0e10;color:var(--muted);padding:9px}
-    @media(max-width:1180px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.decision{grid-template-columns:1fr}.decision-main{border-right:0;border-bottom:1px solid var(--line2)}.conflicts,.method,.watch-strip{grid-template-columns:1fr}.status{text-align:left}.topbar{grid-template-columns:1fr}}
-    @media(max-width:760px){:root{--day:46px;--name:168px}.app{padding:6px}.calendar{grid-template-columns:1fr}.day{min-height:88px}.kpis{grid-template-columns:1fr}h1{font-size:19px}.value{font-size:20px}.grid{padding:6px}.tl-row-name strong{font-size:13px}.source-list li{grid-template-columns:1fr}}
-    @media print{body{background:#fff;color:#111}.app{max-width:none}.terminal,.panel{border-color:#999;background:#fff}.calendar,.grid{display:block}.timeline{overflow:visible}.status,.ticker{color:#111}}
+    .en{display:none}body.en-mode .zh{display:none}body.en-mode .en{display:inline}body.en-mode .zh-block{display:none}body:not(.en-mode) .en-block{display:none}
+    .hide-mobile{display:inline}
+    @media(max-width:980px){.top{grid-template-columns:1fr}.controls{justify-content:flex-start}.stamp{width:max-content}.summary{grid-template-columns:1fr}.shell{padding:18px;border-radius:22px}.timeline-card{padding:18px 12px}.timeline-wrap{padding-left:0;padding-right:0}.hide-mobile{display:none}}
+    @media(max-width:560px){.app{padding:8px}.shell{padding:14px}.top{gap:12px}h1{font-size:23px}.controls{flex-wrap:wrap}.seg,.stamp{max-width:100%;white-space:normal}.timeline{min-width:1120px}.tooltip{width:340px}.summary-card{min-height:auto}}
   </style>
 </head>
 <body>
   <main class="app">
-    <section class="terminal">
-      <div class="topbar">
+    <section class="shell">
+      <header class="top">
         <div>
-          <h1>港股打新资金接力日历 <span class="muted">/ HK IPO Turnover Calendar</span></h1>
-          <div class="ticker">
-            <span class="pill hot">LIVE WINDOW 2026-05-19 to 2026-06-18</span>
-            <span class="pill warn">NEXT REFRESH 每天 12:00 HKT</span>
-            <span class="pill red">NON-ADVICE</span>
-            <span class="pill">未来 10 个港股交易日内的标的全部给出 1-5 分；窗口外只保留灰区观察。</span>
+          <h1><span class="zh">港股打新现金接力时间轴</span><span class="en">HK IPO Cash Relay Timeline</span></h1>
+          <div class="subtitle"><span class="zh">付款、配发、退款、上市。只回答一件事：钱回不回来得及。</span><span class="en">Payment, allotment, refund, listing. One question: can the cash catch the next deal?</span></div>
+        </div>
+        <div class="controls" aria-label="view controls">
+          <div class="seg"><button id="zhBtn" class="active" type="button">简体</button><button id="enBtn" type="button">EN</button></div>
+          <div class="seg"><button id="lightBtn" class="active" type="button">浅色</button><button id="darkBtn" type="button">深色</button></div>
+        </div>
+        <div class="stamp"><span class="zh">更新于</span><span class="en">Updated</span> 2026-05-19 23:20:44 HKT · 11/11</div>
+      </header>
+
+      <section class="timeline-card">
+        <div class="microcopy">
+          <span><span class="zh">每张卡只看付款和退款</span><span class="en">Each card shows only pay and refund</span></span>
+          <span><span class="zh">悬停查看评分、来源、配发、上市</span><span class="en">Hover for score, sources, allotment, listing</span></span>
+        </div>
+        <div class="timeline-wrap" aria-label="cash relay timeline">
+          <div class="timeline">
+            <article class="ipo">
+    <div class="ipo-card">
+      <span class="score-chip">3.2</span>
+      <div class="code">01511</div>
+      <div class="name"><span class="zh">驭势科技</span><span class="en">UISEE Tech</span></div>
+      <div class="ename">自动驾驶/应用软件</div>
+      <div class="mini">
+        <div class="mini-row"><span class="mini-k"><span class="zh">付款</span><span class="en">Pay</span></span><span class="mini-v">05/14 12:00</span></div>
+        <div class="mini-row"><span class="mini-k"><span class="zh">退款</span><span class="en">Refund</span></span><span class="mini-v">05/20</span></div>
+      </div>
+      <div class="verdict warn">上午到账才可接</div>
+      <div class="tooltip">
+        <div class="tip-row"><div class="tip-key"><span class="zh">打新评分</span><span class="en">Score</span></div><div class="tip-value">3.2 / 5 · 偏观察</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">接力结论</span><span class="en">Relay</span></div><div class="tip-value warn">条件接力：05/20 上午到账才算</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">核心理由</span><span class="en">Reason</span></div><div>5月19日暗盘整体接近平开，热度低于同日 07688。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">资金占用</span><span class="en">Cash</span></div><div>HK$3,045.40 · 5月20日退款为条件接力；到账时间未确认前按不可用处理。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">来源</span><span class="en">Sources</span></div><div class="muted">dbs-ipo / aastocks-ipo / jpm-gray-0519</div></div>
+      </div>
+    </div>
+  </article><article class="ipo">
+    <div class="ipo-card">
+      <span class="score-chip">4.4</span>
+      <div class="code">07688</div>
+      <div class="name"><span class="zh">拓璞数控</span><span class="en">Top NC</span></div>
+      <div class="ename">工业机械/数控机床</div>
+      <div class="mini">
+        <div class="mini-row"><span class="mini-k"><span class="zh">付款</span><span class="en">Pay</span></span><span class="mini-v">05/14 12:00</span></div>
+        <div class="mini-row"><span class="mini-k"><span class="zh">退款</span><span class="en">Refund</span></span><span class="mini-v">05/20</span></div>
+      </div>
+      <div class="verdict warn">上午到账才可接</div>
+      <div class="tooltip">
+        <div class="tip-row"><div class="tip-key"><span class="zh">打新评分</span><span class="en">Score</span></div><div class="tip-value">4.4 / 5 · 已兑现强势</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">接力结论</span><span class="en">Relay</span></div><div class="tip-value warn">条件接力：05/20 上午到账才算</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">核心理由</span><span class="en">Reason</span></div><div>5月19日暗盘收涨约 47.8%，短线热度确认。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">资金占用</span><span class="en">Cash</span></div><div>HK$2,665.61 · 5月20日退款可尝试接三只同窗，但必须以券商可用现金为准。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">来源</span><span class="en">Sources</span></div><div class="muted">dbs-ipo / aastocks-ipo / jpm-gray-0519</div></div>
+      </div>
+    </div>
+  </article><article class="ipo">
+    <div class="ipo-card">
+      <span class="score-chip">4.0</span>
+      <div class="code">06872</div>
+      <div class="name"><span class="zh">丹诺医药-B</span><span class="en">TenNor Therapeutics-B</span></div>
+      <div class="ename">生物医药-B</div>
+      <div class="mini">
+        <div class="mini-row"><span class="mini-k"><span class="zh">付款</span><span class="en">Pay</span></span><span class="mini-v">05/18 12:00</span></div>
+        <div class="mini-row"><span class="mini-k"><span class="zh">退款</span><span class="en">Refund</span></span><span class="mini-v">05/22</span></div>
+      </div>
+      <div class="verdict bad">不能接 05/21</div>
+      <div class="tooltip">
+        <div class="tip-row"><div class="tip-key"><span class="zh">打新评分</span><span class="en">Score</span></div><div class="tip-value">4.0 / 5 · 热度强但不可追缴</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">接力结论</span><span class="en">Relay</span></div><div class="tip-value bad">不可接三只同窗；退款晚于截止</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">核心理由</span><span class="en">Reason</span></div><div>5月19日中午已结束官方缴款，晚间只保留结果观察。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">资金占用</span><span class="en">Cash</span></div><div>HK$3,823.17 · 不能接 00901/02723/03310；可用于 5月22日之后的新波次。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">来源</span><span class="en">Sources</span></div><div class="muted">hkex-6872-announcement / dbs-ipo / jpm-gray-0519</div></div>
+      </div>
+    </div>
+  </article><article class="ipo">
+    <div class="ipo-card">
+      <span class="score-chip">3.8</span>
+      <div class="code">02723</div>
+      <div class="name"><span class="zh">深演智能</span><span class="en">DeepZero</span></div>
+      <div class="ename">AI营销/媒体</div>
+      <div class="mini">
+        <div class="mini-row"><span class="mini-k"><span class="zh">付款</span><span class="en">Pay</span></span><span class="mini-v">05/20 12:00</span></div>
+        <div class="mini-row"><span class="mini-k"><span class="zh">退款</span><span class="en">Refund</span></span><span class="mini-v">05/27</span></div>
+      </div>
+      <div class="verdict warn">同窗择一/分仓</div>
+      <div class="tooltip">
+        <div class="tip-row"><div class="tip-key"><span class="zh">打新评分</span><span class="en">Score</span></div><div class="tip-value">3.8 / 5 · 题材强，控制手数</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">接力结论</span><span class="en">Relay</span></div><div class="tip-value warn">同窗互斥：同一笔钱只能择一或分仓</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">核心理由</span><span class="en">Reason</span></div><div>AI营销与企业智能体叙事最容易被短线资金理解。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">资金占用</span><span class="en">Cash</span></div><div>HK$5,605.97 · 5月20日券商截止优先；5月21日官方截止后资金锁到 5月27日。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">来源</span><span class="en">Sources</span></div><div class="muted">hkex-2723-prospectus / dbs-ipo / etnet-2723 / jrj-0519</div></div>
+      </div>
+    </div>
+  </article><article class="ipo">
+    <div class="ipo-card">
+      <span class="score-chip">3.6</span>
+      <div class="code">03310</div>
+      <div class="name"><span class="zh">云英谷科技</span><span class="en">Viewtrix Technology</span></div>
+      <div class="ename">半导体/显示驱动</div>
+      <div class="mini">
+        <div class="mini-row"><span class="mini-k"><span class="zh">付款</span><span class="en">Pay</span></span><span class="mini-v">05/20 12:00</span></div>
+        <div class="mini-row"><span class="mini-k"><span class="zh">退款</span><span class="en">Refund</span></span><span class="mini-v">05/27</span></div>
+      </div>
+      <div class="verdict warn">同窗择一/分仓</div>
+      <div class="tooltip">
+        <div class="tip-row"><div class="tip-key"><span class="zh">打新评分</span><span class="en">Score</span></div><div class="tip-value">3.6 / 5 · 中性偏可打</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">接力结论</span><span class="en">Relay</span></div><div class="tip-value warn">同窗互斥：同一笔钱只能择一或分仓</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">核心理由</span><span class="en">Reason</span></div><div>AMOLED 显示驱动芯片，硬科技辨识度高。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">资金占用</span><span class="en">Cash</span></div><div>HK$4,203.98 · 与 02723/00901 同窗；同一笔钱不能同时全额打三只。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">来源</span><span class="en">Sources</span></div><div class="muted">hkex-3310-prospectus / dbs-ipo / etnet-3310 / jrj-0519</div></div>
+      </div>
+    </div>
+  </article><article class="ipo">
+    <div class="ipo-card">
+      <span class="score-chip">3.2</span>
+      <div class="code">00901</div>
+      <div class="name"><span class="zh">华曦达</span><span class="en">SDMC</span></div>
+      <div class="ename">智慧家庭硬件/终端</div>
+      <div class="mini">
+        <div class="mini-row"><span class="mini-k"><span class="zh">付款</span><span class="en">Pay</span></span><span class="mini-v">05/20 12:00</span></div>
+        <div class="mini-row"><span class="mini-k"><span class="zh">退款</span><span class="en">Refund</span></span><span class="mini-v">05/27</span></div>
+      </div>
+      <div class="verdict warn">同窗择一/分仓</div>
+      <div class="tooltip">
+        <div class="tip-row"><div class="tip-key"><span class="zh">打新评分</span><span class="en">Score</span></div><div class="tip-value">3.2 / 5 · 低占款备选</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">接力结论</span><span class="en">Relay</span></div><div class="tip-value warn">同窗互斥：同一笔钱只能择一或分仓</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">核心理由</span><span class="en">Reason</span></div><div>每手 3,313.08 港元，三只同窗中资金门槛较低。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">资金占用</span><span class="en">Cash</span></div><div>HK$3,313.08 · 低占款但仍与 02723/03310 同窗互斥。</div></div>
+        <div class="tip-row"><div class="tip-key"><span class="zh">来源</span><span class="en">Sources</span></div><div class="muted">dbs-ipo / etnet-0901 / jrj-0519</div></div>
+      </div>
+    </div>
+  </article>
           </div>
         </div>
-        <div class="status">
-          <b>更新于 2026-05-19 22:43:44 HKT</b>
-          HKT / sources 11/11<br>
-          数据状态 verified-refresh
-        </div>
-      </div>
-      <div class="decision">
-        <div class="decision-main">
-          <b>今晚之后，真正可执行的是 00901 / 02723 / 03310 三选一或分仓；06872 已过官方打款截止。</b>
-          5月20日中午是 DBS 口径的三只同窗券商截止，5月21日中午是官方公开发售缴款截止。1511/7688 的退款若在 5月20日上午入账，可以小心接力三只同窗；未显示可用现金前不能算。06872 资金要等 5月22日退款，不能接 5月21日这波。
-        </div>
-        <div class="decision-side">
-          <b>当前最高优先级</b>
-          02723 深演智能：三只同窗里优先看题材弹性，但每手占款最高，只适合有限资金中的小到中等仓位。
-        </div>
-      </div>
-      <div class="kpis">
-        <div class="kpi"><div class="label">下一券商硬截止</div><div class="value">05-20 12:00</div><div class="note">00901 / 02723 / 03310</div></div>
-        <div class="kpi"><div class="label">下一官方打款截止</div><div class="value">05-21 12:00</div><div class="note">三只同窗公开发售</div></div>
-        <div class="kpi"><div class="label">下一退款释放</div><div class="value">05-20</div><div class="note">01511 / 07688 条件接力</div></div>
-        <div class="kpi"><div class="label">明确不可接力</div><div class="value">06872</div><div class="note">退款 05-22，错过 05-21</div></div>
-        <div class="kpi"><div class="label">最高分窗口</div><div class="value">02723 3.8</div><div class="note">题材强，控制手数</div></div>
-      </div>
-    </section>
+      </section>
 
-    <section class="grid">
-      <div class="panel">
-        <div class="panel-head">
-          <h2>Month Calendar / 未来一个月事件日历</h2>
-          <span class="muted">今日线：2026-05-19</span>
-        </div>
-        <div class="panel-body">
-          <div class="calendar">
-            <div class="day today"><div class="date"><span>05/19</span><span class="dow">Tue</span></div><div class="event result">01511 结果</div><div class="event result">07688 结果</div><div class="event deadline">06872 官方 12:00</div><div class="event watch">今晚状态</div></div><div class="day"><div class="date"><span>05/20</span><span class="dow">Wed</span></div><div class="event refund">01511 退款</div><div class="event listing">01511 上市</div><div class="event refund">07688 退款</div><div class="event listing">07688 上市</div><div class="event broker">02723 券商 12:00</div><div class="event broker">03310 券商 12:00</div><div class="event broker">00901 券商 12:00</div><div class="event watch">最关键打款日</div></div><div class="day"><div class="date"><span>05/21</span><span class="dow">Thu</span></div><div class="event result">06872 结果</div><div class="event deadline">02723 官方 12:00</div><div class="event deadline">03310 官方 12:00</div><div class="event deadline">00901 官方 12:00</div><div class="event watch">官方截止/06872 配发</div></div><div class="day"><div class="date"><span>05/22</span><span class="dow">Fri</span></div><div class="event refund">06872 退款</div><div class="event listing">06872 上市</div><div class="event watch">06872 退款/上市</div></div><div class="day weekend"><div class="date"><span>05/23</span><span class="dow">Sat</span></div></div><div class="day weekend"><div class="date"><span>05/24</span><span class="dow">Sun</span></div></div><div class="day holiday"><div class="date"><span>05/25</span><span class="dow">Mon</span></div></div><div class="day"><div class="date"><span>05/26</span><span class="dow">Tue</span></div><div class="event result">02723 结果</div><div class="event result">03310 结果</div><div class="event result">00901 结果</div><div class="event watch">三只同窗出结果</div></div><div class="day"><div class="date"><span>05/27</span><span class="dow">Wed</span></div><div class="event refund">02723 退款</div><div class="event listing">02723 上市</div><div class="event refund">03310 退款</div><div class="event listing">03310 上市</div><div class="event refund">00901 退款</div><div class="event listing">00901 上市</div><div class="event watch">三只同窗退款/上市</div></div><div class="day"><div class="date"><span>05/28</span><span class="dow">Thu</span></div><div class="event watch">灰区：等待披露易新增招股书</div></div><div class="day"><div class="date"><span>05/29</span><span class="dow">Fri</span></div></div><div class="day weekend"><div class="date"><span>05/30</span><span class="dow">Sat</span></div></div><div class="day weekend"><div class="date"><span>05/31</span><span class="dow">Sun</span></div></div><div class="day"><div class="date"><span>06/01</span><span class="dow">Mon</span></div></div><div class="day"><div class="date"><span>06/02</span><span class="dow">Tue</span></div><div class="event watch">灰区：若无新股，页面仍中午更新核验时刻</div></div><div class="day"><div class="date"><span>06/03</span><span class="dow">Wed</span></div></div><div class="day"><div class="date"><span>06/04</span><span class="dow">Thu</span></div></div><div class="day"><div class="date"><span>06/05</span><span class="dow">Fri</span></div></div><div class="day weekend"><div class="date"><span>06/06</span><span class="dow">Sat</span></div></div><div class="day weekend"><div class="date"><span>06/07</span><span class="dow">Sun</span></div></div><div class="day"><div class="date"><span>06/08</span><span class="dow">Mon</span></div></div><div class="day"><div class="date"><span>06/09</span><span class="dow">Tue</span></div></div><div class="day"><div class="date"><span>06/10</span><span class="dow">Wed</span></div></div><div class="day"><div class="date"><span>06/11</span><span class="dow">Thu</span></div></div><div class="day"><div class="date"><span>06/12</span><span class="dow">Fri</span></div></div><div class="day weekend"><div class="date"><span>06/13</span><span class="dow">Sat</span></div></div><div class="day weekend"><div class="date"><span>06/14</span><span class="dow">Sun</span></div></div><div class="day"><div class="date"><span>06/15</span><span class="dow">Mon</span></div></div><div class="day"><div class="date"><span>06/16</span><span class="dow">Tue</span></div></div><div class="day"><div class="date"><span>06/17</span><span class="dow">Wed</span></div></div><div class="day"><div class="date"><span>06/18</span><span class="dow">Thu</span></div><div class="event watch">一个月视野结束</div></div>
-          </div>
-        </div>
-      </div>
-      <aside class="panel">
-        <div class="panel-head">
-          <h2>10D IPO Score / 打新评分</h2>
-          <span class="muted">1-5</span>
-        </div>
-        <div class="panel-body score-list">
-          <article class="score-card"><div class="score-top"><div><div class="score-code">07688 拓璞数控</div><div class="brief">新申购已结束；暗盘强，明日开盘只做纪律性观察，避免高开追价。</div></div><div class="score-num high">4.4</div></div><div class="meters"><div class="meter"><span>日程</span><span class="track"><span class="fill" style="width:60%"></span></span><span>3.0</span></div><div class="meter"><span>热度</span><span class="track"><span class="fill" style="width:92%"></span></span><span>4.6</span></div><div class="meter"><span>资金</span><span class="track"><span class="fill" style="width:86%"></span></span><span>4.3</span></div><div class="meter"><span>风险</span><span class="track"><span class="fill" style="width:76%"></span></span><span>3.8</span></div></div><div class="brief">已兑现强势 · HK$2,665.61 · 已截止，明日上市</div></article><article class="score-card"><div class="score-top"><div><div class="score-code">06872 丹诺医药-B</div><div class="brief">今晚不再追加；等 5月21日配发与 5月22日退款/上市。</div></div><div class="score-num mid">4.0</div></div><div class="meters"><div class="meter"><span>日程</span><span class="track"><span class="fill" style="width:50%"></span></span><span>2.5</span></div><div class="meter"><span>热度</span><span class="track"><span class="fill" style="width:96%"></span></span><span>4.8</span></div><div class="meter"><span>资金</span><span class="track"><span class="fill" style="width:64%"></span></span><span>3.2</span></div><div class="meter"><span>风险</span><span class="track"><span class="fill" style="width:68%"></span></span><span>3.4</span></div></div><div class="brief">热度强但不可追缴 · HK$3,823.17 · 已过官方截止，等结果/退款</div></article><article class="score-card"><div class="score-top"><div><div class="score-code">02723 深演智能</div><div class="brief">三只同窗里优先看题材弹性，但每手占款最高，只适合有限资金中的小到中等仓位。</div></div><div class="score-num mid">3.8</div></div><div class="meters"><div class="meter"><span>日程</span><span class="track"><span class="fill" style="width:80%"></span></span><span>4.0</span></div><div class="meter"><span>热度</span><span class="track"><span class="fill" style="width:82%"></span></span><span>4.1</span></div><div class="meter"><span>资金</span><span class="track"><span class="fill" style="width:60%"></span></span><span>3.0</span></div><div class="meter"><span>风险</span><span class="track"><span class="fill" style="width:76%"></span></span><span>3.8</span></div></div><div class="brief">题材强，控制手数 · HK$5,605.97 · 申购中，同窗三选</div></article><article class="score-card"><div class="score-top"><div><div class="score-code">03310 云英谷科技</div><div class="brief">半导体属性清晰，固定价减小退款不确定性；若只打一只，排在 02723 之后、00901 之前。</div></div><div class="score-num mid">3.6</div></div><div class="meters"><div class="meter"><span>日程</span><span class="track"><span class="fill" style="width:80%"></span></span><span>4.0</span></div><div class="meter"><span>热度</span><span class="track"><span class="fill" style="width:70%"></span></span><span>3.5</span></div><div class="meter"><span>资金</span><span class="track"><span class="fill" style="width:72%"></span></span><span>3.6</span></div><div class="meter"><span>风险</span><span class="track"><span class="fill" style="width:68%"></span></span><span>3.4</span></div></div><div class="brief">中性偏可打 · HK$4,203.98 · 申购中，同窗三选</div></article><article class="score-card"><div class="score-top"><div><div class="score-code">01511 驭势科技</div><div class="brief">等上市表现，不追开盘高位；退款若 20 日上午可用，可接三只同窗。</div></div><div class="score-num low">3.2</div></div><div class="meters"><div class="meter"><span>日程</span><span class="track"><span class="fill" style="width:60%"></span></span><span>3.0</span></div><div class="meter"><span>热度</span><span class="track"><span class="fill" style="width:52%"></span></span><span>2.6</span></div><div class="meter"><span>资金</span><span class="track"><span class="fill" style="width:76%"></span></span><span>3.8</span></div><div class="meter"><span>风险</span><span class="track"><span class="fill" style="width:56%"></span></span><span>2.8</span></div></div><div class="brief">偏观察 · HK$3,045.40 · 已截止，明日上市</div></article><article class="score-card"><div class="score-top"><div><div class="score-code">00901 华曦达</div><div class="brief">适合作为低占款备选；题材弹性弱于 02723，产业估值吸引力弱于 03310。</div></div><div class="score-num low">3.2</div></div><div class="meters"><div class="meter"><span>日程</span><span class="track"><span class="fill" style="width:80%"></span></span><span>4.0</span></div><div class="meter"><span>热度</span><span class="track"><span class="fill" style="width:58%"></span></span><span>2.9</span></div><div class="meter"><span>资金</span><span class="track"><span class="fill" style="width:80%"></span></span><span>4.0</span></div><div class="meter"><span>风险</span><span class="track"><span class="fill" style="width:58%"></span></span><span>2.9</span></div></div><div class="brief">低占款备选 · HK$3,313.08 · 申购中，同窗三选</div></article>
-        </div>
-      </aside>
-    </section>
-
-    <section class="panel" style="margin:0 10px 10px">
-      <div class="panel-head">
-        <h2>Cash Turnover Timeline / 资金接力时间轴</h2>
-        <span class="muted">B=券商截止 O=官方截止 A=结果 R=退款 L=上市</span>
-      </div>
-      <div class="timeline">
-        <div class="tl-grid">
-          <div class="tl-cell tl-head tl-name">标的</div>
-          <div class="tl-cell tl-head">05/19<br>Tue</div><div class="tl-cell tl-head">05/20<br>Wed</div><div class="tl-cell tl-head">05/21<br>Thu</div><div class="tl-cell tl-head">05/22<br>Fri</div><div class="tl-cell tl-head">05/23<br>Sat</div><div class="tl-cell tl-head">05/24<br>Sun</div><div class="tl-cell tl-head">05/25<br>Mon</div><div class="tl-cell tl-head">05/26<br>Tue</div><div class="tl-cell tl-head">05/27<br>Wed</div><div class="tl-cell tl-head">05/28<br>Thu</div><div class="tl-cell tl-head">05/29<br>Fri</div><div class="tl-cell tl-head">05/30<br>Sat</div><div class="tl-cell tl-head">05/31<br>Sun</div><div class="tl-cell tl-head">06/01<br>Mon</div><div class="tl-cell tl-head">06/02<br>Tue</div><div class="tl-cell tl-head">06/03<br>Wed</div><div class="tl-cell tl-head">06/04<br>Thu</div><div class="tl-cell tl-head">06/05<br>Fri</div><div class="tl-cell tl-head">06/06<br>Sat</div><div class="tl-cell tl-head">06/07<br>Sun</div><div class="tl-cell tl-head">06/08<br>Mon</div><div class="tl-cell tl-head">06/09<br>Tue</div><div class="tl-cell tl-head">06/10<br>Wed</div><div class="tl-cell tl-head">06/11<br>Thu</div><div class="tl-cell tl-head">06/12<br>Fri</div><div class="tl-cell tl-head">06/13<br>Sat</div><div class="tl-cell tl-head">06/14<br>Sun</div><div class="tl-cell tl-head">06/15<br>Mon</div><div class="tl-cell tl-head">06/16<br>Tue</div><div class="tl-cell tl-head">06/17<br>Wed</div><div class="tl-cell tl-head">06/18<br>Thu</div>
-          <div class="tl-cell tl-name tl-row-name"><strong>01511</strong><span>驭势科技 / 已截止，明日上市</span></div><div class="bar-row"><div class="bar to-list" style="grid-column:1/3"><span>HK$60.30</span><span>HK$3,045.40</span></div><span class="marker result" style="grid-column:1">A</span><span class="marker refund" style="grid-column:2">R</span><span class="marker listing" style="grid-column:2">L</span></div><div class="tl-cell tl-name tl-row-name"><strong>07688</strong><span>拓璞数控 / 已截止，明日上市</span></div><div class="bar-row"><div class="bar to-list" style="grid-column:1/3"><span>HK$26.39</span><span>HK$2,665.61</span></div><span class="marker result" style="grid-column:1">A</span><span class="marker refund" style="grid-column:2">R</span><span class="marker listing" style="grid-column:2">L</span></div><div class="tl-cell tl-name tl-row-name"><strong>06872</strong><span>丹诺医药-B / 已过官方截止，等结果/退款</span></div><div class="bar-row"><div class="bar closed" style="grid-column:1/5"><span>HK$75.70</span><span>HK$3,823.17</span></div><span class="marker official" style="grid-column:1">O</span><span class="marker result" style="grid-column:3">A</span><span class="marker refund" style="grid-column:4">R</span><span class="marker listing" style="grid-column:4">L</span></div><div class="tl-cell tl-name tl-row-name"><strong>02723</strong><span>深演智能 / 申购中，同窗三选</span></div><div class="bar-row"><div class="bar open" style="grid-column:1/10"><span>HK$43.50-55.50</span><span>HK$5,605.97</span></div><span class="marker broker" style="grid-column:2">B</span><span class="marker official" style="grid-column:3">O</span><span class="marker result" style="grid-column:8">A</span><span class="marker refund" style="grid-column:9">R</span><span class="marker listing" style="grid-column:9">L</span></div><div class="tl-cell tl-name tl-row-name"><strong>03310</strong><span>云英谷科技 / 申购中，同窗三选</span></div><div class="bar-row"><div class="bar open" style="grid-column:1/10"><span>HK$20.81</span><span>HK$4,203.98</span></div><span class="marker broker" style="grid-column:2">B</span><span class="marker official" style="grid-column:3">O</span><span class="marker result" style="grid-column:8">A</span><span class="marker refund" style="grid-column:9">R</span><span class="marker listing" style="grid-column:9">L</span></div><div class="tl-cell tl-name tl-row-name"><strong>00901</strong><span>华曦达 / 申购中，同窗三选</span></div><div class="bar-row"><div class="bar open" style="grid-column:1/10"><span>HK$32.80</span><span>HK$3,313.08</span></div><span class="marker broker" style="grid-column:2">B</span><span class="marker official" style="grid-column:3">O</span><span class="marker result" style="grid-column:8">A</span><span class="marker refund" style="grid-column:9">R</span><span class="marker listing" style="grid-column:9">L</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="grid">
-      <div class="panel">
-        <div class="panel-head"><h2>Capital Conflict Matrix / 互斥资金矩阵</h2></div>
-        <div class="panel-body">
-          <div class="conflicts">
-            <div class="conflict hard"><h3>06872 -&gt; 00901/02723/03310</h3><b>不可接力</b><p class="muted">06872 退款是 5月22日；三只同窗官方缴款 5月21日中午截止，券商更早到 5月20日中午。</p></div><div class="conflict tight"><h3>01511/07688 -&gt; 三只同窗</h3><b>只在上午到账时可接</b><p class="muted">退款日期同为 5月20日；若券商上午未显示可用现金，不能赶 5月20日中午券商截止。</p></div><div class="conflict same"><h3>00901 vs 02723 vs 03310</h3><b>同窗互斥</b><p class="muted">三只同日截止、同日退款、同日上市。同一笔现金不能同时全额打三只，只能选择或分仓。</p></div>
-          </div>
-        </div>
-      </div>
-      <aside class="panel">
-        <div class="panel-head"><h2>Grey Zone / 远期灰区</h2></div>
-        <div class="panel-body watch-strip">
-          <div class="watch-card"><b>2026-05-28</b><br>灰区：等待披露易新增招股书</div><div class="watch-card"><b>2026-06-02</b><br>灰区：若无新股，页面仍中午更新核验时刻</div><div class="watch-card"><b>2026-06-18</b><br>一个月视野结束</div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="grid">
-      <div class="panel">
-        <div class="panel-head"><h2>Daily Brief / 逐日提示</h2></div>
-        <div class="panel-body">
-          <table>
-            <thead><tr><th>日期</th><th>事件</th><th>资金判断</th></tr></thead>
-            <tbody><tr><td>2026-05-19</td><td>今晚状态</td><td>06872 已过官方截止；1511/7688 暗盘完成；三只同窗仍可按官方口径到 5月21日中午，但券商口径优先看 5月20日中午。</td></tr><tr><td>2026-05-20</td><td>最关键打款日</td><td>DBS 对 00901/02723/03310 的网上申购截止为 12:00；1511/7688 同日上市和退款，接力必须看到券商可用现金。</td></tr><tr><td>2026-05-21</td><td>官方截止/06872 配发</td><td>00901/02723/03310 官方公开发售中午截止；06872 配发结果预计 23:00 前公布。</td></tr><tr><td>2026-05-22</td><td>06872 退款/上市</td><td>06872 退款和上市。该笔资金可进入后续灰区，但已经不能接 5月21日三只同窗。</td></tr><tr><td>2026-05-26</td><td>三只同窗出结果</td><td>00901/02723/03310 预计 23:00 前公布最终价、申购水平、配发结果；同日灰市。</td></tr><tr><td>2026-05-27</td><td>三只同窗退款/上市</td><td>00901/02723/03310 退款和上市，形成下一轮资金释放点。</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-      <aside class="panel">
-        <div class="panel-head"><h2>Score Method / 评分口径</h2></div>
-        <div class="panel-body method">
-          <div class="method-card"><b>日程可执行性 30%</b><br><span class="muted">券商截止、官方截止、退款和上市是否允许资金接力。</span></div><div class="method-card"><b>题材/热度 25%</b><br><span class="muted">同业短线偏好、暗盘/超购/近期同类首日表现。</span></div><div class="method-card"><b>资金效率 25%</b><br><span class="muted">每手入场费、锁资天数、同窗互斥程度。</span></div><div class="method-card"><b>兑现风险 20%</b><br><span class="muted">价格区间、行业估值、基本面波动、上市日追价风险。</span></div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="grid">
-      <div class="panel">
-        <div class="panel-head"><h2>Research Notes / 单票逻辑</h2></div>
-        <div class="panel-body">
-          <table>
-            <thead><tr><th>代码</th><th>动作</th><th>克制理由</th><th>资金备注</th></tr></thead>
-            <tbody><tr><td><b>07688</b><br><span class="muted">拓璞数控</span></td><td>新申购已结束；暗盘强，明日开盘只做纪律性观察，避免高开追价。</td><td>• 5月19日暗盘收涨约 47.8%，短线热度确认。<br>• 每手入场费低，资金占用效率高。<br>• 上市当日波动会放大，不把暗盘涨幅直接外推成开盘买入信号。</td><td>5月20日退款可尝试接三只同窗，但必须以券商可用现金为准。</td></tr><tr><td><b>06872</b><br><span class="muted">丹诺医药-B</span></td><td>今晚不再追加；等 5月21日配发与 5月22日退款/上市。</td><td>• 5月19日中午已结束官方缴款，晚间只保留结果观察。<br>• 市场消息称公开发售初步超购约 9,026 倍，热度很强。<br>• 资金要到 5月22日退款，不能拿去接 5月21日三只同窗。</td><td>不能接 00901/02723/03310；可用于 5月22日之后的新波次。</td></tr><tr><td><b>02723</b><br><span class="muted">深演智能</span></td><td>三只同窗里优先看题材弹性，但每手占款最高，只适合有限资金中的小到中等仓位。</td><td>• AI营销与企业智能体叙事最容易被短线资金理解。<br>• 价格区间而非固定价，若最终价低于最高价会有多缴款退回。<br>• 每手 5,605.97 港元，占款高；与 00901/03310 同窗互斥。</td><td>5月20日券商截止优先；5月21日官方截止后资金锁到 5月27日。</td></tr><tr><td><b>03310</b><br><span class="muted">云英谷科技</span></td><td>半导体属性清晰，固定价减小退款不确定性；若只打一只，排在 02723 之后、00901 之前。</td><td>• AMOLED 显示驱动芯片，硬科技辨识度高。<br>• 固定价 HK$20.81，每手 4,203.98 港元，资金效率中等。<br>• 行业周期与估值市值约 89 亿港元，需要克制评分。</td><td>与 02723/00901 同窗；同一笔钱不能同时全额打三只。</td></tr><tr><td><b>01511</b><br><span class="muted">驭势科技</span></td><td>等上市表现，不追开盘高位；退款若 20 日上午可用，可接三只同窗。</td><td>• 5月19日暗盘整体接近平开，热度低于同日 07688。<br>• 入场费低但上市前已无新申购价值，只保留退款接力价值。<br>• 若券商在 5月20日上午确认退款，可作为 00901/02723/03310 的补充资金。</td><td>5月20日退款为条件接力；到账时间未确认前按不可用处理。</td></tr><tr><td><b>00901</b><br><span class="muted">华曦达</span></td><td>适合作为低占款备选；题材弹性弱于 02723，产业估值吸引力弱于 03310。</td><td>• 每手 3,313.08 港元，三只同窗中资金门槛较低。<br>• 智慧家庭硬件以海外电信/零售客户为主，贸易与汇率风险较显性。<br>• 若市场孖展热度不足，优先级低于 02723/03310。</td><td>低占款但仍与 02723/03310 同窗互斥。</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-      <aside class="panel">
-        <div class="panel-head"><h2>Sources / 来源核验</h2></div>
-        <div class="panel-body">
-          <ul class="source-list">
-            <li><span class="source-status ok">VERIFIED</span><span><a href="https://www.hk.dbs.com/ecportalweb/ipo/IPO.aspx?Lang=en-us">DBS IPO Shares Subscription Service</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0518/2026051800022_c.pdf">HKEX 03310 Viewtrix prospectus</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0518/2026051800024_c.pdf">HKEX 02723 DeepZero prospectus</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0514/2026051400003.pdf">HKEX 06872 TenNor global offering announcement</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=3310">etnet 03310 IPO info</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=2723">etnet 02723 IPO info</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=901">etnet 00901 IPO info</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://www.aastocks.com/en/stocks/market/ipo/upcomingipo/company-news?symbol=02621">AASTOCKS IPO Plus</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://jpmhkwarrants.com/en_hk/ajax/newsfeed-result/newsID/40365/scategory/hongkong/page/">JPM/AASTOCKS May 19 grey-market news feed</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://24h.jrj.com.cn/2026/05/19063257133355.shtml">JRJ May 19 HK IPO activity note</a></span></li><li><span class="source-status ok">VERIFIED</span><span><a href="https://www.gov.hk/en/about/abouthk/holiday/2026.htm">GovHK 2026 public holidays</a></span></li>
-          </ul>
-        </div>
-      </aside>
-    </section>
-
-    <section class="panel" style="margin:0 10px">
-      <div class="panel-head"><h2>Disclaimer</h2></div>
-      <div class="panel-body muted">公开信息整理，不构成投资建议。评分是资金效率与事件风险排序，不是买卖指令。券商退款到账时点可能不同，未核验字段均按待核实处理。</div>
+      <section class="summary">
+        <article class="summary-card good">
+    <div class="summary-head"><span><span class="zh">可接力</span><span class="en">Can Relay</span></span><span>2</span></div>
+    <div class="summary-list">
+      <div class="summary-line"><strong>01511 / 07688</strong><span class="muted">05/20 退款，只有上午到账才可接 05/20 券商截止</span></div><div class="summary-line"><strong>06872</strong><span class="muted">05/22 退款，可接 05/23 后的新波次</span></div>
+    </div>
+  </article>
+        <article class="summary-card bad">
+    <div class="summary-head"><span><span class="zh">不可接力</span><span class="en">Cannot Relay</span></span><span>2</span></div>
+    <div class="summary-list">
+      <div class="summary-line"><strong>06872 -&gt; 三只同窗</strong><span class="muted">退款 05/22，晚于 05/21 官方截止</span></div><div class="summary-line"><strong>未显示可用现金</strong><span class="muted">一律按不能接力处理</span></div>
+    </div>
+  </article>
+        <article class="summary-card same">
+    <div class="summary-head"><span><span class="zh">同窗期</span><span class="en">Choose One</span></span><span>3</span></div>
+    <div class="summary-list">
+      <div class="summary-line"><strong>02723</strong><span class="muted">深演智能 · 05/20 券商 / 05/21 官方</span></div><div class="summary-line"><strong>03310</strong><span class="muted">云英谷科技 · 05/20 券商 / 05/21 官方</span></div><div class="summary-line"><strong>00901</strong><span class="muted">华曦达 · 05/20 券商 / 05/21 官方</span></div>
+    </div>
+  </article>
+      </section>
     </section>
   </main>
+  <script>
+    const body=document.body;
+    const zhBtn=document.getElementById('zhBtn'),enBtn=document.getElementById('enBtn'),lightBtn=document.getElementById('lightBtn'),darkBtn=document.getElementById('darkBtn');
+    zhBtn.addEventListener('click',()=>{body.classList.remove('en-mode');zhBtn.classList.add('active');enBtn.classList.remove('active')});
+    enBtn.addEventListener('click',()=>{body.classList.add('en-mode');enBtn.classList.add('active');zhBtn.classList.remove('active')});
+    lightBtn.addEventListener('click',()=>{body.classList.remove('dark');lightBtn.classList.add('active');darkBtn.classList.remove('active')});
+    darkBtn.addEventListener('click',()=>{body.classList.add('dark');darkBtn.classList.add('active');lightBtn.classList.remove('active')});
+  </script>
 </body>
 </html>

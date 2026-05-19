@@ -18,13 +18,13 @@ open dist/index.html
 
 ## Production flow
 
-`launchd` triggers `scripts/refresh-and-publish.sh` daily at 03:00 UTC+8; the script skips weekends and Hong Kong public holidays before touching data. The script:
+`launchd` triggers `scripts/refresh-and-publish.sh` daily at 12:00 UTC+8; the script skips weekends and Hong Kong public holidays before touching data. The script:
 
 1. Skips weekends and Hong Kong public holidays before touching data.
 2. Fetches and validates sources.
 3. Writes `data/latest.json` and `data/history/YYYY-MM-DD.json`.
 4. Builds `dist/index.html`.
-5. Commits and pushes when a Git remote exists.
+5. Commits and pushes when a Git remote exists, so Netlify can redeploy even when only the right-top `updated at` timestamp changes.
 6. Leaves the previous site intact if fetching or building fails.
 
 The holiday guard currently uses the gazetted 2026 GovHK holiday list:

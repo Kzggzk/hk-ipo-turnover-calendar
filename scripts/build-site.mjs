@@ -13,7 +13,19 @@ await writeFile(path.join(distDir, "index.html"), render(data), "utf8");
 console.log(`Built dist/index.html from data/latest.json (${data.meta?.fetchedAt || "unknown"})`);
 
 function render(data) {
-  const dataJson = JSON.stringify(data).replace(/</g, "\\u003c");
+  const days = calendarDays(data.meta.coverageStart, data.meta.coverageEnd);
+  const holidays = new Set((data.holidays || []).map((holiday) => holiday.date));
+  const tradingDays = days.filter((day) => day.weekday !== 0 && day.weekday !== 6 && !holidays.has(day.iso));
+  const asOf = data.meta.runDate || data.meta.asOfDate || data.meta.coverageStart;
+  const okSources = data.audit?.okSourceCount ?? (data.sourceChecks || []).filter((source) => source.ok).length;
+  const sourceCount = data.audit?.sourceCount ?? (data.sources || []).length;
+  const monthColumns = days.length;
+  const activeIpos = data.ipos.filter((ipo) => ipo.status !== "listed-reference" || dayIndex(days, ipo.listingDate) >= 0);
+  const scoredIpos = data.ipos
+    .filter((ipo) => typeof ipo.score === "number" && ipo.status !== "listed-reference")
+    .sort((a, b) => b.score - a.score);
+  const topOpen = scoredIpos.find((ipo) => ipo.status === "open") || scoredIpos[0];
+
   return `<!doctype html>
 <html lang="zh-Hans">
 <head>
@@ -22,54 +34,389 @@ function render(data) {
   <meta http-equiv="refresh" content="900">
   <title>${escapeHtml(data.meta.siteTitleZh)} | ${escapeHtml(data.meta.siteTitleEn)}</title>
   <style>
-    :root{color-scheme:light;--bg:#f7f9fb;--panel:#fff;--panel2:#f1f5f8;--line:#d8e1e8;--line2:#7d8994;--text:#17212b;--muted:#5f6b76;--blue:#e5f1f8;--blue2:#8fbad2;--yellow:#fbf5d8;--red:#f7e4e4;--graybar:#e7ebef;--focus:#0f1720;--day:88px;--name:210px;--row:70px;--axis:46px}
-    body.dark{color-scheme:dark;--bg:#0e141a;--panel:#151c23;--panel2:#1b242c;--line:#2d3944;--line2:#8b98a4;--text:#edf3f7;--muted:#a7b2bc;--blue:#1b303d;--blue2:#77a9c7;--yellow:#34301d;--red:#3a2424;--graybar:#202932;--focus:#f1f6f9}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.45;letter-spacing:0}a{color:inherit;text-decoration:underline;text-decoration-thickness:1px}
-    button,select,input{border:1px solid var(--line2);background:var(--panel);color:var(--text);border-radius:0;min-height:32px;padding:6px 9px;font:inherit}button{cursor:pointer}button.active{background:var(--blue);border-color:var(--blue2)}input{width:110px}
-    .app{max-width:1680px;margin:0 auto;padding:12px}.topbar{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;border:1px solid var(--line);background:var(--panel);padding:12px}h1{font-size:22px;margin:0 0 5px 0;line-height:1.15;font-weight:760}h2{font-size:15px;margin:18px 0 8px 0;line-height:1.2;font-weight:760}h3{font-size:13px;margin:0 0 6px 0;font-weight:720}.sub{color:var(--muted);font-size:12px}.toolbar{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
-    .kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);border-top:0;background:var(--panel)}.kpi{min-height:78px;padding:10px;border-right:1px solid var(--line)}.kpi:last-child{border-right:0}.label{font-size:11px;color:var(--muted);margin-bottom:6px}.value{font-size:22px;font-weight:760;line-height:1.05}.note{font-size:12px;color:var(--muted);margin-top:5px}
-    .decision-strip{display:grid;grid-template-columns:1.35fr .65fr;border:1px solid var(--line);border-top:0;background:var(--panel)}.decision-main,.decision-side{padding:10px;border-right:1px solid var(--line)}.decision-side{border-right:0;background:var(--red)}.decision-main b,.decision-side b{display:block;margin-bottom:4px}
-    .workspace{display:grid;grid-template-columns:1fr 360px;gap:12px;align-items:start}.panel{border:1px solid var(--line);background:var(--panel)}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px;border-bottom:1px solid var(--line);background:var(--panel2)}.panel-head h2{margin:0}.panel-tools{display:flex;flex-wrap:wrap;gap:6px}
-    .timeline{display:grid;grid-template-columns:var(--name) 1fr;overflow:hidden}.names{border-right:1px solid var(--line);background:var(--panel);z-index:5}.name-head{height:var(--axis);padding:10px 9px;border-bottom:1px solid var(--line);font-weight:720;background:var(--panel)}.stock-name{height:var(--row);border-bottom:1px solid var(--line);padding:8px 9px}.stock-name:hover,.lane:hover,.card:hover{background:var(--panel2)}.stock-code{font-weight:760;font-size:16px;line-height:1}.stock-meta{margin-top:5px;color:var(--muted);font-size:12px}.mini-tags{margin-top:5px;display:flex;gap:4px;flex-wrap:wrap}.mini-tag{border:1px solid var(--line2);background:var(--panel2);padding:0 4px;font-size:10px}
-    .time-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;background:var(--panel)}.time-grid{width:calc(var(--day) * 30);min-width:calc(var(--day) * 30);position:relative}.axis{height:var(--axis);display:grid;grid-template-columns:repeat(30,var(--day));border-bottom:1px solid var(--line)}.day{border-right:1px solid var(--line);background:var(--panel2);text-align:center;padding-top:6px;color:var(--muted);font-size:11px}.day.today-day{background:var(--blue);color:var(--text);font-weight:720}
-    .lane{height:var(--row);display:grid;grid-template-columns:repeat(30,var(--day));border-bottom:1px solid var(--line);position:relative}.bar{align-self:center;height:34px;border:1px solid var(--line2);margin:0 5px;background:var(--blue);position:relative;display:flex;align-items:center;overflow:visible}.bar.closed{background:var(--graybar)}.bar.warn{background:var(--yellow)}.bar.risk{background:var(--red)}.bar.future{background:var(--graybar);border-style:dashed;color:var(--muted)}.bar-label{width:100%;padding:0 7px;display:flex;justify-content:space-between;gap:8px;white-space:nowrap;overflow:hidden;font-size:11px;font-weight:650}
-    .mark{position:absolute;top:-8px;bottom:-8px;width:1px;background:var(--focus)}.mark span{position:absolute;top:-16px;left:-10px;min-width:22px;border:1px solid var(--line2);background:var(--panel);color:var(--text);text-align:center;font-size:10px;line-height:14px}.today-line{position:absolute;top:0;bottom:0;width:2px;background:var(--focus);z-index:4}.today-label{position:absolute;top:2px;border:1px solid var(--focus);background:var(--panel);z-index:5;font-size:10px;padding:2px 4px;white-space:nowrap}.connector-svg{position:absolute;top:var(--axis);left:0;width:calc(var(--day) * 30);height:calc(var(--row) * 6);pointer-events:none;z-index:3;overflow:visible}
-    .legend{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--line);font-size:11px}.legend div{padding:7px 9px;border-right:1px solid var(--line)}.legend div:last-child{border-right:0}.sample{display:inline-block;width:34px;border-top:2px solid var(--blue2);vertical-align:middle;margin-right:6px}.sample.tight{border-top-style:dashed;border-color:var(--line2)}.sample.miss{border-top-style:dotted;border-color:var(--line2)}
-    .status-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}.status-cell{padding:9px;border-right:1px solid var(--line)}.status-cell:last-child{border-right:0}.side-stack{display:grid;gap:12px}.cards{display:grid;grid-template-columns:1fr;gap:8px;padding:8px}.card{border:1px solid var(--line);background:var(--panel);padding:9px}.card:hover{border-color:var(--line2)}.card-head{display:grid;grid-template-columns:1fr auto;gap:8px;border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:7px}.score{width:34px;height:34px;border:1px solid var(--line2);background:var(--blue);display:grid;place-items:center;font-size:17px;font-weight:760}
-    .bars{display:grid;gap:5px;margin-top:7px}.score-row{display:grid;grid-template-columns:64px 1fr 24px;gap:6px;align-items:center;font-size:11px}.meter{height:8px;border:1px solid var(--line2);background:var(--panel)}.fill{display:block;height:100%;background:var(--blue2)}.kv{display:grid;grid-template-columns:84px 1fr;gap:4px 8px;margin-top:7px;font-size:11px}.kv b{color:var(--muted);font-weight:650}.tag{display:inline-block;border:1px solid var(--line2);background:var(--panel2);padding:1px 5px;margin:0 4px 4px 0;font-size:11px;white-space:nowrap}.tag.blue{background:var(--blue)}.tag.yellow{background:var(--yellow)}.tag.red{background:var(--red)}
-    table{width:100%;border-collapse:collapse;background:var(--panel);font-size:12px}th,td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}th{background:var(--panel2);font-weight:720}.matrix{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:8px}.conflict{border:1px solid var(--line);padding:9px;min-height:122px;background:var(--panel)}.conflict.bad{background:var(--red)}.conflict.tight{background:var(--yellow)}.conflict.good{background:var(--blue)}.scenario{display:grid;grid-template-columns:170px 1fr;gap:10px;padding:10px}.scenario-controls{display:grid;gap:7px;align-content:start}.allocation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.alloc-card{border:1px solid var(--line);padding:9px;background:var(--panel)}
-    .muted{color:var(--muted)}.small{font-size:11px}.roadmap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:8px}.road{border:1px dashed var(--line2);background:var(--graybar);padding:9px;color:var(--muted)}.source-list{font-size:11px;margin:0;padding:10px 10px 10px 26px}.source-list li{margin-bottom:6px}.has-tip{position:relative}.has-tip:hover::after{content:attr(data-tip);position:absolute;left:8px;top:calc(100% + 7px);width:min(360px,70vw);z-index:50;background:var(--panel);color:var(--text);border:1px solid var(--focus);padding:8px;font-size:11px;white-space:normal;line-height:1.45}
-    .zh{display:inline}.en{display:none}body.en-mode .zh{display:none}body.en-mode .en{display:inline}body.en-mode .zh-block{display:none}body:not(.en-mode) .en-block{display:none}.hidden{display:none!important}
-    @media(max-width:1120px){.workspace{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.decision-strip{grid-template-columns:1fr}.decision-main{border-right:0;border-bottom:1px solid var(--line)}.matrix,.roadmap{grid-template-columns:1fr}.scenario,.allocation{grid-template-columns:1fr}}
-    @media(max-width:760px){:root{--day:74px;--name:142px;--row:78px}.app{padding:8px}.topbar{grid-template-columns:1fr}.toolbar{justify-content:flex-start}h1{font-size:18px}.kpi-grid{grid-template-columns:1fr 1fr}.stock-code{font-size:13px}.stock-meta{font-size:11px}.bar-label{font-size:10px}.legend,.status-strip{grid-template-columns:1fr}.legend div,.status-cell{border-right:0;border-bottom:1px solid var(--line)}}@media print{body{background:#fff;color:#111}.toolbar,.panel-tools{display:none}.app{max-width:none}.time-scroll{overflow:visible}}
+    :root{
+      color-scheme:dark;
+      --bg:#080b0d;--panel:#0e1417;--panel2:#111b20;--panel3:#16242a;
+      --line:#27363d;--line2:#3f535d;--text:#edf5f7;--muted:#8fa2ab;
+      --cyan:#32d5ff;--cyan2:#0e7f9c;--amber:#ffbf3d;--green:#21d07a;--red:#ff5b5b;
+      --blue:#4f7cff;--gray:#5f6b73;--black:#050708;
+      --day:54px;--row:58px;--name:220px;
+    }
+    *{box-sizing:border-box}
+    html,body{max-width:100%;overflow-x:hidden}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-size:12px;line-height:1.42;letter-spacing:0}
+    a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
+    .app{max-width:1720px;margin:0 auto;padding:10px 10px 28px}
+    .terminal{border:1px solid var(--line2);background:linear-gradient(180deg,#0b1114 0%,#080b0d 100%);box-shadow:0 0 0 1px rgba(255,255,255,.02) inset}
+    .topbar{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;padding:11px 12px;border-bottom:1px solid var(--line2)}
+    h1{margin:0;font-size:24px;line-height:1;font-weight:820;letter-spacing:0;color:#fff}
+    h2{margin:0;font-size:13px;line-height:1.2;font-weight:760;text-transform:uppercase;color:#dceff3}
+    h3{margin:0;font-size:12px;line-height:1.2;font-weight:760}
+    .ticker{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+    .pill{display:inline-flex;align-items:center;gap:5px;min-height:22px;border:1px solid var(--line2);background:var(--panel2);padding:3px 7px;color:var(--muted);white-space:normal;max-width:100%;overflow-wrap:anywhere}
+    .pill.hot{border-color:rgba(50,213,255,.65);color:var(--cyan);background:rgba(50,213,255,.08)}
+    .pill.warn{border-color:rgba(255,191,61,.65);color:var(--amber);background:rgba(255,191,61,.08)}
+    .pill.red{border-color:rgba(255,91,91,.7);color:#ffb0b0;background:rgba(255,91,91,.09)}
+    .status{text-align:right;color:var(--muted);font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
+    .status b{display:block;color:var(--cyan);font-size:16px;line-height:1.2}
+    .decision{display:grid;grid-template-columns:1.35fr .65fr;border-bottom:1px solid var(--line2)}
+    .decision-main,.decision-side{padding:12px;border-right:1px solid var(--line2);background:var(--panel)}
+    .decision-side{border-right:0;background:linear-gradient(180deg,rgba(255,191,61,.10),rgba(255,91,91,.07))}
+    .decision b{display:block;margin-bottom:5px;color:#fff;font-size:14px}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--line2)}
+    .kpi{padding:10px 12px;border-right:1px solid var(--line);min-height:76px;background:#0c1215}
+    .kpi:last-child{border-right:0}
+    .label{font-size:10px;text-transform:uppercase;color:var(--muted);font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
+    .value{font-size:23px;font-weight:840;line-height:1.05;margin-top:4px;color:#fff;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
+    .note{margin-top:4px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 392px;gap:10px;padding:10px}
+    .panel{border:1px solid var(--line2);background:var(--panel)}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line2);background:var(--panel2)}
+    .panel-body{padding:10px}
+    .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .day{min-height:112px;padding:7px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#0b1114;position:relative;overflow:hidden}
+    .day.weekend,.day.holiday{background:#090d10;color:var(--gray)}
+    .day.today{outline:2px solid var(--cyan);outline-offset:-2px;background:#0f1d22}
+    .date{display:flex;justify-content:space-between;gap:6px;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace;color:#e9f4f6;font-weight:760}
+    .dow{color:var(--muted);font-weight:520}
+    .event{margin-top:5px;border-left:3px solid var(--line2);padding:3px 5px;background:rgba(255,255,255,.035);font-size:11px}
+    .event.deadline{border-color:var(--red)}
+    .event.broker{border-color:var(--amber)}
+    .event.result{border-color:var(--cyan)}
+    .event.refund{border-color:var(--green)}
+    .event.listing{border-color:var(--blue)}
+    .event.watch{border-color:var(--gray);color:var(--muted)}
+    .timeline{overflow-x:auto;border-top:1px solid var(--line)}
+    .tl-grid{min-width:calc(${monthColumns} * var(--day) + var(--name));display:grid;grid-template-columns:var(--name) repeat(${monthColumns},var(--day))}
+    .tl-cell{height:31px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 6px;background:#0b1114;color:var(--muted);font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
+    .tl-head{height:38px;background:#10191d;color:#d9edf1;font-weight:780}
+    .tl-name{position:sticky;left:0;z-index:3;background:#10191d;color:#fff;border-right:1px solid var(--line2);font-family:inherit}
+    .tl-row-name{height:var(--row);display:block;padding:8px 9px}
+    .tl-row-name strong{display:block;font-size:16px;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
+    .tl-row-name span{display:block;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bar-row{height:var(--row);position:relative;display:grid;grid-template-columns:repeat(${monthColumns},var(--day));border-bottom:1px solid var(--line);grid-column:2/-1;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(var(--day) - 1px),var(--line) calc(var(--day) - 1px),var(--line) var(--day))}
+    .bar{align-self:center;height:28px;border:1px solid var(--line2);background:#17262c;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 8px;overflow:hidden;white-space:nowrap;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
+    .bar.open{border-color:var(--cyan);background:rgba(50,213,255,.12);color:#c9f6ff}
+    .bar.closed{border-color:var(--amber);background:rgba(255,191,61,.10);color:#ffe5a7}
+    .bar.to-list{border-color:var(--blue);background:rgba(79,124,255,.11);color:#d3dcff}
+    .bar.listed-reference{border-color:var(--gray);background:rgba(95,107,115,.10);color:#a6b4bb}
+    .marker{align-self:end;margin-bottom:3px;justify-self:center;z-index:2;min-width:20px;text-align:center;border:1px solid var(--line2);background:#0a0f12;color:#dfeef2;font-size:10px;line-height:14px;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
+    .marker.broker{border-color:var(--amber);color:var(--amber)}
+    .marker.official{border-color:var(--red);color:#ffb4b4}
+    .marker.result{border-color:var(--cyan);color:var(--cyan)}
+    .marker.refund{border-color:var(--green);color:var(--green)}
+    .marker.listing{border-color:var(--blue);color:#bfd0ff}
+    .score-list{display:grid;gap:8px}
+    .score-card{border:1px solid var(--line);background:#0b1114;padding:9px}
+    .score-top{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+    .score-code{font-size:15px;font-weight:830;font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace;color:#fff}
+    .score-num{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--cyan);background:rgba(50,213,255,.10);font-size:22px;font-weight:840;color:var(--cyan);font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace}
+    .score-num.high{border-color:var(--green);color:var(--green);background:rgba(33,208,122,.10)}
+    .score-num.mid{border-color:var(--amber);color:var(--amber);background:rgba(255,191,61,.10)}
+    .score-num.low{border-color:var(--gray);color:#b2bdc3;background:rgba(95,107,115,.10)}
+    .brief{color:var(--muted);margin-top:5px}
+    .meters{display:grid;gap:4px;margin-top:8px}
+    .meter{display:grid;grid-template-columns:64px 1fr 25px;gap:6px;align-items:center;color:var(--muted);font-size:10px}
+    .track{height:7px;border:1px solid var(--line2);background:#080c0f}
+    .fill{display:block;height:100%;background:var(--cyan)}
+    .conflicts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+    .conflict{border:1px solid var(--line2);background:#0b1114;padding:10px;min-height:128px}
+    .conflict.hard{border-color:rgba(255,91,91,.72);background:rgba(255,91,91,.07)}
+    .conflict.tight{border-color:rgba(255,191,61,.72);background:rgba(255,191,61,.07)}
+    .conflict.same{border-color:rgba(50,213,255,.62);background:rgba(50,213,255,.06)}
+    .conflict b{display:block;margin:7px 0;color:#fff;font-size:15px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+    th{background:#10191d;color:#dceff3;font-weight:760}
+    td{background:#0b1114;color:#cdd9dd}
+    .muted{color:var(--muted)}
+    .small{font-size:10px}
+    .source-list{margin:0;padding:0;list-style:none;display:grid;gap:5px}
+    .source-list li{display:grid;grid-template-columns:88px 1fr;gap:8px;border-bottom:1px solid var(--line);padding-bottom:5px}
+    .source-status{font-family:"SF Mono","Roboto Mono",Menlo,Consolas,monospace;color:var(--muted)}
+    .ok{color:var(--green)}.fail{color:var(--red)}
+    .method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .method-card{border:1px solid var(--line);background:#0b1114;padding:9px}
+    .method-card b{color:#fff}
+    .watch-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+    .watch-card{border:1px dashed var(--line2);background:#0a0e10;color:var(--muted);padding:9px}
+    @media(max-width:1180px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.decision{grid-template-columns:1fr}.decision-main{border-right:0;border-bottom:1px solid var(--line2)}.conflicts,.method,.watch-strip{grid-template-columns:1fr}.status{text-align:left}.topbar{grid-template-columns:1fr}}
+    @media(max-width:760px){:root{--day:46px;--name:168px}.app{padding:6px}.calendar{grid-template-columns:1fr}.day{min-height:88px}.kpis{grid-template-columns:1fr}h1{font-size:19px}.value{font-size:20px}.grid{padding:6px}.tl-row-name strong{font-size:13px}.source-list li{grid-template-columns:1fr}}
+    @media print{body{background:#fff;color:#111}.app{max-width:none}.terminal,.panel{border-color:#999;background:#fff}.calendar,.grid{display:block}.timeline{overflow:visible}.status,.ticker{color:#111}}
   </style>
 </head>
 <body>
   <main class="app">
-    <section class="topbar"><div><h1><span class="zh">${escapeHtml(data.meta.siteTitleZh)}</span><span class="en">${escapeHtml(data.meta.siteTitleEn)}</span></h1><div class="sub"><span class="zh">公开预览版。抓取时刻 ${escapeHtml(data.meta.fetchedAt)}。Mac 自动任务每天 03:00 UTC+8 触发，非港股交易日自动跳过，页面每15分钟自动刷新。</span><span class="en">Public preview. Fetched ${escapeHtml(data.meta.fetchedAt)}. The Mac refresh job triggers daily at 03:00 UTC+8, skips non-HK-trading days, and this page reloads every 15 minutes.</span></div></div><div class="toolbar"><button id="langBtn" type="button">EN</button><button id="themeBtn" type="button"><span class="zh">深色</span><span class="en">Dark</span></button><button id="focusBtn" type="button"><span class="zh">聚焦T-5/T+15</span><span class="en">Focus T-5/T+15</span></button><button id="allBtn" type="button"><span class="zh">完整视野</span><span class="en">Full Horizon</span></button><button id="scoreBtn" type="button"><span class="zh">仅4分以上</span><span class="en">Only 4+</span></button><button id="printBtn" type="button"><span class="zh">打印/PDF</span><span class="en">Print/PDF</span></button></div></section>
-    <section class="kpi-grid"><div class="kpi"><div class="label"><span class="zh">下一硬截止</span><span class="en">Next Hard Cut-off</span></div><div class="value">05-06 12:00</div><div class="note">01236 <span class="zh">乐动机器人</span><span class="en">LDROBOT</span></div></div><div class="kpi"><div class="label"><span class="zh">当前可申购</span><span class="en">Open for Subscription</span></div><div class="value">3</div><div class="note">1236 / 7630 / 7666</div></div><div class="kpi"><div class="label"><span class="zh">互斥资金组</span><span class="en">Cash Conflict Groups</span></div><div class="value">2</div><div class="note"><span class="zh">1236 vs 5月8组；7630 vs 7666</span><span class="en">1236 vs May 8 group; 7630 vs 7666</span></div></div><div class="kpi"><div class="label"><span class="zh">覆盖窗口</span><span class="en">Coverage</span></div><div class="value">${escapeHtml(data.meta.coverageLabel || "20 trading days")}</div><div class="note"><span class="zh">假期按港交所口径跳过</span><span class="en">HKEX holiday basis</span></div></div><div class="kpi"><div class="label"><span class="zh">来源核验</span><span class="en">Source Checks</span></div><div class="value">${data.audit?.okSourceCount ?? 0}/${data.audit?.sourceCount ?? 0}</div><div class="note"><span class="zh">失败源不覆盖旧判断</span><span class="en">Failures do not overwrite prior view</span></div></div></section>
-    <section class="decision-strip"><div class="decision-main"><b><span class="zh">今天的可执行结论</span><span class="en">Actionable Decision</span></b><span class="zh">不要取消已占用资金去追另一只。1236 明天中午截止，但退款预计到 05-11，不能接 05-08 的 7630/7666。5月8组必须用独立现金，或者等可孚医疗退款到账后再分配。</span><span class="en">Do not cancel locked cash blindly. 1236 closes tomorrow noon, but its refund is expected by 05-11, so it cannot fund the 05-08 7630/7666 window. Use separate cash for the May 8 group, or wait for 1187 refund confirmation.</span></div><div class="decision-side"><b><span class="zh">最高优先级风险</span><span class="en">Highest Priority Risk</span></b><span class="zh">把“退款或之前”误读成“申购截止前可用”。券商实际入账小时未核验前，按不可用处理。</span><span class="en">Do not read "refund by" as "usable before cut-off". Until broker posting hour is verified, treat that cash as unavailable.</span></div></section>
-    <div class="workspace"><section class="panel"><div class="panel-head"><h2><span class="zh">资金接力主时间轴</span><span class="en">Primary Turnover Timeline</span></h2><div class="panel-tools"><select id="industryFilter"><option value="all">全部行业 / All</option><option value="robot">机器人 / Robotics</option><option value="biotech">生物医药 / Biotech</option><option value="medical">医疗器械 / Medical</option></select><select id="stateFilter"><option value="all">全部状态 / All</option><option value="open">认购中 / Open</option><option value="waiting">待配发退款 / Waiting</option><option value="listed">已上市 / Listed</option></select></div></div><div class="timeline"><div class="names"><div class="name-head"><span class="zh">标的与状态</span><span class="en">Name and Status</span></div><div id="nameRows"></div></div><div class="time-scroll" id="timeScroll"><div class="time-grid" id="timeGrid"><div class="today-line" id="todayLine"></div><div class="today-label" id="todayLabel">Today</div><svg class="connector-svg" id="connectorSvg"></svg><div class="axis" id="axis"></div><div id="lanes"></div></div></div></div><div class="legend"><div><span class="tag">S</span><span class="zh">申购开启</span><span class="en">Offer opens</span></div><div><span class="tag">C</span><span class="zh">申购截止</span><span class="en">Cut-off</span></div><div><span class="tag">A</span><span class="zh">配发公布</span><span class="en">Allotment</span></div><div><span class="tag">R</span><span class="zh">退款到账</span><span class="en">Refund</span></div><div><span class="sample"></span><span class="zh">可无缝接力</span><span class="en">Seamless</span> <span class="sample tight"></span><span class="zh">紧张</span><span class="en">Tight</span></div><div><span class="sample miss"></span><span class="zh">错过/不可接</span><span class="en">Missed</span></div></div><div class="status-strip"><div class="status-cell"><b><span class="zh">视野规则</span><span class="en">Sightline Rule</span></b><br><span class="zh">主轴保留最近已影响退款的标的和未来20个交易日，远期未核验标的进灰区。</span><span class="en">The axis keeps recent refund-relevant deals plus the next 20 trading days. Unverified future names stay grey.</span></div><div class="status-cell"><b>Hover</b><br><span class="zh">鼠标停在条、节点、矩阵卡上，会显示来源、时点和资金判断。</span><span class="en">Hover over bars, nodes, or conflict cards for source, timing, and cash logic.</span></div><div class="status-cell"><b><span class="zh">公开网站规则</span><span class="en">Public Rule</span></b><br><span class="zh">默认只展示核验字段，未核验字段必须标待核实。</span><span class="en">Only verified fields are shown by default; unresolved fields stay pending.</span></div><div class="status-cell"><b><span class="zh">下一轮自动搜索</span><span class="en">Next Search</span></b><br><span class="zh">每天 03:00 触发；非港股交易日跳过；交易日重查披露易、招股书、配发公告、券商页和媒体。</span><span class="en">Daily at 03:00, the job triggers; non-HK-trading days are skipped; trading days recheck HKEX, prospectuses, allotments, brokers, and media.</span></div></div></section><aside class="side-stack"><section class="panel"><div class="panel-head"><h2><span class="zh">当前优先级</span><span class="en">Current Priority</span></h2></div><div class="cards" id="rankCards"></div></section><section class="panel"><div class="panel-head"><h2><span class="zh">远期灰区</span><span class="en">Long-Sight Grey Zone</span></h2></div><div class="roadmap"><div class="road"><b>05-14 to 05-22</b><br><span class="zh">无已核验可申购标的，等待披露易新增招股书。</span><span class="en">No verified open deal. Wait for new HKEX prospectuses.</span></div><div class="road"><b>05-25</b><br><span class="zh">香港公众假期，已从交易日横轴跳过。</span><span class="en">Hong Kong public holiday. Skipped from the trading-day axis.</span></div><div class="road"><b>05-26 to 06-02</b><br><span class="zh">保留灰色观察，不做资金承诺。</span><span class="en">Grey watch only. No cash commitment yet.</span></div><div class="road"><b><span class="zh">新增标的入口</span><span class="en">New Deal Intake</span></b><br><span class="zh">下一轮任务会把新增代码自动插入时间轴。</span><span class="en">The next run will insert new tickers into the axis automatically.</span></div></div></section></aside></div>
-    <section class="panel"><div class="panel-head"><h2><span class="zh">互斥资金矩阵</span><span class="en">Capital Conflict Matrix</span></h2></div><div class="matrix"><div class="conflict bad has-tip" data-tip="01236 refund is expected by 2026-05-11, later than the 07630/07666 2026-05-08 12:00 deadline. This is not a valid relay."><h3>01236 -> 07630/07666</h3><b><span class="zh">不可接力</span><span class="en">Not Relayable</span></b><p><span class="zh">1236 资金释放晚于5月8截止。不能把这笔钱算给7630/7666。</span><span class="en">1236 releases after the May 8 deadline. Do not budget it for 7630/7666.</span></p></div><div class="conflict tight has-tip" data-tip="07630 and 07666 share the same subscription window and cut-off. This is a split-or-choose decision, not a relay."><h3>07630 vs 07666</h3><b><span class="zh">同窗互斥</span><span class="en">Same-Window Conflict</span></b><p><span class="zh">同日截止，同一笔现金不能全额打两只。默认 7666 优先，7630 轻仓或放弃。</span><span class="en">Same cut-off. One cash pool cannot fully fund both. Default: 7666 first, 7630 small or skip.</span></p></div><div class="conflict good has-tip" data-tip="1187 refund may be usable for May 8 deals only after the broker account shows usable cash. Official documents say refund by date but not broker posting hour."><h3>01187 -> 07630/07666</h3><b><span class="zh">有条件可接</span><span class="en">Conditionally Relayable</span></b><p><span class="zh">只有账户显示可用现金后才算接力成功；未显示前按不可用。</span><span class="en">Valid only after usable cash appears in the broker account. Until then, treat it as unavailable.</span></p></div></div></section>
-    <section class="panel"><div class="panel-head"><h2><span class="zh">组合模拟器</span><span class="en">Combination Simulator</span></h2></div><div class="scenario"><div class="scenario-controls"><label><span class="zh">可用现金 HKD</span><span class="en">Available cash HKD</span><br><input id="cashInput" type="number" value="20000" min="0" step="1000"></label><select id="modeSelect"><option value="safe">保守 / Conservative</option><option value="balanced">平衡 / Balanced</option><option value="aggressive">进取 / Aggressive</option></select><button id="simulateBtn" type="button"><span class="zh">重新计算</span><span class="en">Recalculate</span></button></div><div class="allocation" id="allocation"></div></div></section>
-    <section class="workspace"><div class="panel"><div class="panel-head"><h2><span class="zh">逐日日历</span><span class="en">Daily Calendar</span></h2></div><table id="dayTable"></table></div><div class="panel"><div class="panel-head"><h2><span class="zh">明日重拉字段</span><span class="en">Refresh Fields</span></h2></div><table id="refreshTable"></table></div></section>
-    <section class="panel"><div class="panel-head"><h2><span class="zh">来源与抓取时刻</span><span class="en">Sources and Fetch Time</span></h2></div><ul class="source-list" id="sourceList"></ul></section>
-    <section class="panel"><div class="panel-head"><h2><span class="zh">声明</span><span class="en">Disclaimer</span></h2></div><div style="padding:10px"><span class="zh">${escapeHtml(data.meta.nonAdviceZh || "")}</span><span class="en">${escapeHtml(data.meta.nonAdviceEn || "")}</span></div></section>
+    <section class="terminal">
+      <div class="topbar">
+        <div>
+          <h1>${escapeHtml(data.meta.siteTitleZh)} <span class="muted">/ ${escapeHtml(data.meta.siteTitleEn)}</span></h1>
+          <div class="ticker">
+            <span class="pill hot">LIVE WINDOW ${escapeHtml(data.meta.coverageLabel)}</span>
+            <span class="pill warn">NEXT REFRESH ${escapeHtml(data.meta.nextRefreshLocal)}</span>
+            <span class="pill red">NON-ADVICE</span>
+            <span class="pill">${escapeHtml(data.scoreWindow.ruleZh)}</span>
+          </div>
+        </div>
+        <div class="status">
+          <b>更新于 ${escapeHtml(formatTimestamp(data.meta.fetchedAt))}</b>
+          HKT / sources ${okSources}/${sourceCount}<br>
+          数据状态 ${escapeHtml(data.meta.dataStatus || "unknown")}
+        </div>
+      </div>
+      <div class="decision">
+        <div class="decision-main">
+          <b>${escapeHtml(data.decision.headlineZh)}</b>
+          ${escapeHtml(data.decision.bodyZh)}
+        </div>
+        <div class="decision-side">
+          <b>当前最高优先级</b>
+          ${topOpen ? `${escapeHtml(topOpen.code)} ${escapeHtml(topOpen.nameZh)}：${escapeHtml(topOpen.actionZh)}` : "等待新增招股书。"}
+        </div>
+      </div>
+      <div class="kpis">
+        ${renderKpi("下一券商硬截止", "05-20 12:00", "00901 / 02723 / 03310")}
+        ${renderKpi("下一官方打款截止", "05-21 12:00", "三只同窗公开发售")}
+        ${renderKpi("下一退款释放", "05-20", "01511 / 07688 条件接力")}
+        ${renderKpi("明确不可接力", "06872", "退款 05-22，错过 05-21")}
+        ${renderKpi("最高分窗口", topOpen ? `${topOpen.code} ${topOpen.score.toFixed(1)}` : "-", topOpen ? topOpen.scoreLabelZh : "-")}
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Month Calendar / 未来一个月事件日历</h2>
+          <span class="muted">今日线：${escapeHtml(asOf)}</span>
+        </div>
+        <div class="panel-body">
+          <div class="calendar">
+            ${renderCalendar(days, data, holidays, asOf)}
+          </div>
+        </div>
+      </div>
+      <aside class="panel">
+        <div class="panel-head">
+          <h2>10D IPO Score / 打新评分</h2>
+          <span class="muted">1-5</span>
+        </div>
+        <div class="panel-body score-list">
+          ${scoredIpos.map(renderScoreCard).join("")}
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel" style="margin:0 10px 10px">
+      <div class="panel-head">
+        <h2>Cash Turnover Timeline / 资金接力时间轴</h2>
+        <span class="muted">B=券商截止 O=官方截止 A=结果 R=退款 L=上市</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-grid">
+          <div class="tl-cell tl-head tl-name">标的</div>
+          ${days.map((day) => `<div class="tl-cell tl-head">${escapeHtml(day.mmdd)}<br>${escapeHtml(day.dow)}</div>`).join("")}
+          ${activeIpos.map((ipo) => renderTimelineRow(ipo, days)).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-head"><h2>Capital Conflict Matrix / 互斥资金矩阵</h2></div>
+        <div class="panel-body">
+          <div class="conflicts">
+            ${(data.conflicts || []).map(renderConflict).join("")}
+          </div>
+        </div>
+      </div>
+      <aside class="panel">
+        <div class="panel-head"><h2>Grey Zone / 远期灰区</h2></div>
+        <div class="panel-body watch-strip">
+          ${(data.watchlist || []).map((item) => `<div class="watch-card"><b>${escapeHtml(item.date)}</b><br>${escapeHtml(item.labelZh)}</div>`).join("")}
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-head"><h2>Daily Brief / 逐日提示</h2></div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>日期</th><th>事件</th><th>资金判断</th></tr></thead>
+            <tbody>${(data.dailyNotes || []).map((note) => `<tr><td>${escapeHtml(note.date)}</td><td>${escapeHtml(note.titleZh)}</td><td>${escapeHtml(note.bodyZh)}</td></tr>`).join("")}</tbody>
+          </table>
+        </div>
+      </div>
+      <aside class="panel">
+        <div class="panel-head"><h2>Score Method / 评分口径</h2></div>
+        <div class="panel-body method">
+          ${(data.methodology || []).map((item) => `<div class="method-card"><b>${escapeHtml(item.nameZh)} ${escapeHtml(item.weight)}</b><br><span class="muted">${escapeHtml(item.bodyZh)}</span></div>`).join("")}
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-head"><h2>Research Notes / 单票逻辑</h2></div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>代码</th><th>动作</th><th>克制理由</th><th>资金备注</th></tr></thead>
+            <tbody>${scoredIpos.map(renderResearchRow).join("")}</tbody>
+          </table>
+        </div>
+      </div>
+      <aside class="panel">
+        <div class="panel-head"><h2>Sources / 来源核验</h2></div>
+        <div class="panel-body">
+          <ul class="source-list">
+            ${(data.sources || []).map((source) => renderSource(source, data.sourceChecks || [])).join("")}
+          </ul>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel" style="margin:0 10px">
+      <div class="panel-head"><h2>Disclaimer</h2></div>
+      <div class="panel-body muted">${escapeHtml(data.meta.nonAdviceZh)}</div>
+    </section>
   </main>
-  <script id="site-data" type="application/json">${dataJson}</script>
-  <script>
-    const data=JSON.parse(document.getElementById('site-data').textContent);const days=data.days;const stocks=data.stocks;const connectors=data.connectors;const body=document.body;const root=document.documentElement;const axis=document.getElementById('axis');const lanes=document.getElementById('lanes');const nameRows=document.getElementById('nameRows');const svg=document.getElementById('connectorSvg');const rankCards=document.getElementById('rankCards');let scoreOnly=false;function dayWidth(){return parseFloat(getComputedStyle(root).getPropertyValue('--day'))}function rowHeight(){return parseFloat(getComputedStyle(root).getPropertyValue('--row'))}function isEn(){return body.classList.contains('en-mode')}function labelFor(s){return isEn()?s.nameEn:s.nameZh}function shouldShow(s){const ind=document.getElementById('industryFilter').value;const st=document.getElementById('stateFilter').value;if(scoreOnly&&s.score<4)return false;if(ind!=='all'&&s.industry!==ind)return false;if(st!=='all'&&s.state!==st)return false;return true}
-    function renderAxis(){axis.innerHTML='';days.forEach((d,i)=>{const el=document.createElement('div');el.className='day'+(i===6?' today-day':'');el.innerHTML=d[0]+'<br>'+d[1];axis.appendChild(el)});const x=(6+.72)*dayWidth();document.getElementById('todayLine').style.left=x+'px';document.getElementById('todayLabel').style.left=(x+4)+'px';document.getElementById('todayLabel').textContent='Today '+(data.meta.fetchedAt||'').slice(5,16).replace('T',' ')}
-    function renderTimeline(){renderAxis();lanes.innerHTML='';nameRows.innerHTML='';const visible=stocks.filter(shouldShow);visible.forEach((s)=>{const name=document.createElement('div');name.className='stock-name has-tip';name.dataset.tip=s.tip;name.innerHTML='<div class="stock-code">'+s.code+'</div><div class="stock-meta">'+labelFor(s)+' - '+(s.score?s.score+'/5':'watch')+'</div><div class="mini-tags"><span class="mini-tag">'+s.state+'</span><span class="mini-tag">'+s.industry+'</span></div>';nameRows.appendChild(name);const lane=document.createElement('div');lane.className='lane';const bar=document.createElement('div');bar.className='bar has-tip '+(s.bar==='open'?'':s.bar);bar.dataset.tip=s.tip;bar.style.gridColumn=(s.start+1)+' / '+(s.end+2);bar.innerHTML='<div class="bar-label"><span>'+s.money+'</span><span>'+s.lot+'</span></div>';const spanDays=Math.max(1,s.end-s.start+1);(s.marks||[]).forEach(m=>{const pct=((m[1]-s.start+.5)/spanDays)*100;const mk=document.createElement('i');mk.className='mark';mk.style.left=pct+'%';mk.innerHTML='<span>'+m[0]+'</span>';bar.appendChild(mk)});lane.appendChild(bar);lanes.appendChild(lane)});renderConnectors(visible)}
-    function rowIndex(code,visible){return visible.findIndex(s=>s.code===code)}function renderConnectors(visible){const w=dayWidth(),h=rowHeight();svg.setAttribute('height',visible.length*h);svg.innerHTML='';connectors.forEach(c=>{const a=rowIndex(c.from,visible),b=rowIndex(c.to,visible);if(a<0||b<0)return;const x1=(c.fromDay+.5)*w,y1=a*h+h/2,x2=(c.toDay+.5)*w,y2=b*h+h/2;const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('x1',x1);line.setAttribute('y1',y1);line.setAttribute('x2',x2);line.setAttribute('y2',y2);line.setAttribute('stroke',c.type==='good'?'var(--blue2)':'var(--line2)');line.setAttribute('stroke-width','2');if(c.type==='tight')line.setAttribute('stroke-dasharray','7 5');if(c.type==='miss')line.setAttribute('stroke-dasharray','2 6');svg.appendChild(line);const text=document.createElementNS('http://www.w3.org/2000/svg','text');text.setAttribute('x',(x1+x2)/2+8);text.setAttribute('y',(y1+y2)/2-5);text.setAttribute('fill','var(--text)');text.setAttribute('font-size','11');text.textContent=c.label;svg.appendChild(text)})}
-    function renderCards(){rankCards.innerHTML='';stocks.filter(s=>s.score>0).sort((a,b)=>b.score-a.score).forEach(s=>{const c=document.createElement('article');c.className='card has-tip';c.dataset.tip=s.tip;c.innerHTML='<div class="card-head"><div><h3>'+s.code+' '+labelFor(s)+'</h3><div class="muted">'+(isEn()?s.actionEn:s.actionZh)+'</div></div><div class="score">'+s.score+'</div></div><div class="bars">'+['Quality','Value','Heat','Turnover'].map((k,i)=>'<div class="score-row"><span>'+k+'</span><span class="meter"><span class="fill" style="width:'+(s.scores[i]*20)+'%"></span></span><b>'+s.scores[i].toFixed(1)+'</b></div>').join('')+'</div><div class="kv"><b>Cash</b><span>'+s.money+' / '+s.lot+'</span><b>Window</b><span>'+days[s.start][0]+' to '+days[s.end][0]+'</span><b>Status</b><span>'+s.state+'</span></div>';rankCards.appendChild(c)})}
-    function renderTables(){document.getElementById('dayTable').innerHTML='<thead><tr><th>Day</th><th>Events</th><th>Preferred</th><th>Avoid</th></tr></thead><tbody>'+data.dayEvents.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td></tr>').join('')+'</tbody>';document.getElementById('refreshTable').innerHTML='<tbody>'+data.refreshFields.map(r=>'<tr><th>'+r[0]+'</th><td>'+(isEn()?r[2]:r[1])+'</td></tr>').join('')+'</tbody>';document.getElementById('sourceList').innerHTML=data.sources.map(s=>{const check=(data.sourceChecks||[]).find(c=>c.id===s.id);const status=check?(check.ok?'verified':'待核实'):'待核实';return '<li>'+escapeHtml(s.name)+' - '+status+' - '+escapeHtml(data.meta.fetchedAt||'')+': <a href="'+s.url+'">'+s.url+'</a></li>'}).join('')}
-    function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]))}
-    function renderAllocation(){const cash=Number(document.getElementById('cashInput').value||0);const mode=document.getElementById('modeSelect').value;let plans;if(mode==='safe')plans=[['Keep cash',cash,'等1187退款和新招股'],['07666',0,'暂不动用独立现金'],['01236',0,'过夜风险可回避']];if(mode==='balanced')plans=[['01236',Math.min(6061,cash),'一手或放弃'],['07666',Math.max(0,Math.min(5303,cash-6061)),'独立现金优先'],['Reserve',Math.max(0,cash-11364),'留给5月8或新标']];if(mode==='aggressive')plans=[['01236',Math.min(6061,cash),'小仓先占'],['07666',Math.max(0,Math.min(10606,cash-6061)),'优先双手以内'],['07630',Math.max(0,cash-16667),'剩余额度才考虑']];document.getElementById('allocation').innerHTML=plans.map(p=>'<div class="alloc-card"><h3>'+p[0]+'</h3><div class="value">HK$'+Math.round(p[1]).toLocaleString()+'</div><p>'+p[2]+'</p></div>').join('')}
-    function renderAll(){renderTimeline();renderCards();renderTables();renderAllocation()}document.getElementById('langBtn').addEventListener('click',()=>{body.classList.toggle('en-mode');document.getElementById('langBtn').textContent=isEn()?'中文':'EN';renderAll()});document.getElementById('themeBtn').addEventListener('click',()=>body.classList.toggle('dark'));document.getElementById('scoreBtn').addEventListener('click',e=>{scoreOnly=!scoreOnly;e.currentTarget.classList.toggle('active',scoreOnly);renderTimeline()});document.getElementById('focusBtn').addEventListener('click',()=>{document.getElementById('timeScroll').scrollLeft=dayWidth()*1});document.getElementById('allBtn').addEventListener('click',()=>{document.getElementById('timeScroll').scrollLeft=0});document.getElementById('printBtn').addEventListener('click',()=>window.print());document.getElementById('industryFilter').addEventListener('change',renderTimeline);document.getElementById('stateFilter').addEventListener('change',renderTimeline);document.getElementById('simulateBtn').addEventListener('click',renderAllocation);document.getElementById('modeSelect').addEventListener('change',renderAllocation);window.addEventListener('resize',renderTimeline);renderAll();setTimeout(()=>{document.getElementById('timeScroll').scrollLeft=dayWidth()*2},50);
-  </script>
 </body>
 </html>`;
+}
+
+function renderKpi(label, value, note) {
+  return `<div class="kpi"><div class="label">${escapeHtml(label)}</div><div class="value">${escapeHtml(value)}</div><div class="note">${escapeHtml(note)}</div></div>`;
+}
+
+function renderCalendar(days, data, holidays, asOf) {
+  const events = eventsByDate(data);
+  return days.map((day) => {
+    const classes = ["day"];
+    if (day.weekday === 0 || day.weekday === 6) classes.push("weekend");
+    if (holidays.has(day.iso)) classes.push("holiday");
+    if (day.iso === asOf) classes.push("today");
+    const eventHtml = (events.get(day.iso) || [])
+      .map((event) => `<div class="event ${event.type}">${escapeHtml(event.label)}</div>`)
+      .join("");
+    return `<div class="${classes.join(" ")}"><div class="date"><span>${escapeHtml(day.mmdd)}</span><span class="dow">${escapeHtml(day.dow)}</span></div>${eventHtml}</div>`;
+  }).join("");
+}
+
+function renderTimelineRow(ipo, days) {
+  const start = Math.max(0, dayIndex(days, dateOnly(ipo.offerStart)));
+  const end = Math.max(start, dayIndex(days, ipo.listingDate || ipo.refundDate || dateOnly(ipo.officialCutoff)));
+  const barClass = ipo.status === "open" ? "open" : ipo.status === "closed" ? "closed" : ipo.status === "to-list" ? "to-list" : "listed-reference";
+  const markers = [
+    ["B", ipo.brokerCutoff, "broker"],
+    ["O", ipo.officialCutoff, "official"],
+    ["A", ipo.resultTime, "result"],
+    ["R", ipo.refundDate, "refund"],
+    ["L", ipo.listingDate, "listing"]
+  ].map(([label, value, type]) => renderMarker(label, value, type, days)).join("");
+
+  return `<div class="tl-cell tl-name tl-row-name"><strong>${escapeHtml(ipo.code)}</strong><span>${escapeHtml(ipo.nameZh)} / ${escapeHtml(ipo.statusZh)}</span></div><div class="bar-row"><div class="bar ${barClass}" style="grid-column:${start + 1}/${end + 2}"><span>${escapeHtml(ipo.price)}</span><span>${escapeHtml(ipo.entryFee)}</span></div>${markers}</div>`;
+}
+
+function renderMarker(label, value, type, days) {
+  if (!value) return "";
+  const idx = dayIndex(days, dateOnly(value));
+  if (idx < 0) return "";
+  return `<span class="marker ${type}" style="grid-column:${idx + 1}">${escapeHtml(label)}</span>`;
+}
+
+function renderScoreCard(ipo) {
+  const scoreClass = ipo.score >= 4.2 ? "high" : ipo.score >= 3.4 ? "mid" : "low";
+  const breakdown = ipo.scoreBreakdown || {};
+  const meters = [
+    ["日程", breakdown.schedule],
+    ["热度", breakdown.heat],
+    ["资金", breakdown.cash],
+    ["风险", breakdown.risk]
+  ].map(([label, value]) => {
+    const width = Math.max(0, Math.min(100, Number(value || 0) * 20));
+    return `<div class="meter"><span>${escapeHtml(label)}</span><span class="track"><span class="fill" style="width:${width}%"></span></span><span>${Number(value || 0).toFixed(1)}</span></div>`;
+  }).join("");
+  return `<article class="score-card"><div class="score-top"><div><div class="score-code">${escapeHtml(ipo.code)} ${escapeHtml(ipo.nameZh)}</div><div class="brief">${escapeHtml(ipo.actionZh)}</div></div><div class="score-num ${scoreClass}">${ipo.score.toFixed(1)}</div></div><div class="meters">${meters}</div><div class="brief">${escapeHtml(ipo.scoreLabelZh)} · ${escapeHtml(ipo.entryFee)} · ${escapeHtml(ipo.statusZh)}</div></article>`;
+}
+
+function renderConflict(conflict) {
+  return `<div class="conflict ${escapeHtml(conflict.type)}"><h3>${escapeHtml(conflict.titleZh)}</h3><b>${escapeHtml(conflict.verdictZh)}</b><p class="muted">${escapeHtml(conflict.bodyZh)}</p></div>`;
+}
+
+function renderResearchRow(ipo) {
+  const thesis = (ipo.thesisZh || []).map((item) => `• ${escapeHtml(item)}`).join("<br>");
+  return `<tr><td><b>${escapeHtml(ipo.code)}</b><br><span class="muted">${escapeHtml(ipo.nameZh)}</span></td><td>${escapeHtml(ipo.actionZh)}</td><td>${thesis}</td><td>${escapeHtml(ipo.capitalNoteZh || "")}</td></tr>`;
+}
+
+function renderSource(source, checks) {
+  const check = checks.find((item) => item.id === source.id);
+  const status = check ? (check.ok ? "VERIFIED" : "FAILED") : "PENDING";
+  const klass = check ? (check.ok ? "ok" : "fail") : "";
+  return `<li><span class="source-status ${klass}">${escapeHtml(status)}</span><span><a href="${escapeAttr(source.url)}">${escapeHtml(source.name)}</a></span></li>`;
+}
+
+function eventsByDate(data) {
+  const map = new Map();
+  const add = (date, label, type) => {
+    if (!date) return;
+    const iso = dateOnly(date);
+    if (!map.has(iso)) map.set(iso, []);
+    map.get(iso).push({ label, type });
+  };
+  for (const ipo of data.ipos || []) {
+    add(ipo.brokerCutoff, `${ipo.code} 券商 ${timeOnly(ipo.brokerCutoff)}`, "broker");
+    add(ipo.officialCutoff, `${ipo.code} 官方 ${timeOnly(ipo.officialCutoff)}`, "deadline");
+    add(ipo.resultTime, `${ipo.code} 结果`, "result");
+    add(ipo.refundDate, `${ipo.code} 退款`, "refund");
+    add(ipo.listingDate, `${ipo.code} 上市`, "listing");
+  }
+  for (const note of data.dailyNotes || []) add(note.date, note.titleZh, "watch");
+  for (const item of data.watchlist || []) add(item.date, item.labelZh, "watch");
+  return map;
+}
+
+function calendarDays(start, end) {
+  const days = [];
+  const cursor = parseDate(start);
+  const last = parseDate(end);
+  while (cursor <= last) {
+    const iso = toIsoDate(cursor);
+    days.push({
+      iso,
+      mmdd: iso.slice(5).replace("-", "/"),
+      dow: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][cursor.getUTCDay()],
+      weekday: cursor.getUTCDay()
+    });
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+  return days;
+}
+
+function dayIndex(days, date) {
+  return days.findIndex((day) => day.iso === date);
+}
+
+function parseDate(date) {
+  return new Date(`${date}T00:00:00Z`);
+}
+
+function toIsoDate(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function dateOnly(value) {
+  return String(value || "").slice(0, 10);
+}
+
+function timeOnly(value) {
+  const text = String(value || "");
+  const match = text.match(/T(\d{2}:\d{2})/);
+  return match ? match[1] : "";
+}
+
+function formatTimestamp(value) {
+  const text = String(value || "");
+  return text.replace("T", " ").replace("+08:00", " HKT");
 }
 
 function escapeHtml(value) {
@@ -80,4 +427,8 @@ function escapeHtml(value) {
     '"': "&quot;",
     "'": "&#039;"
   })[ch]);
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value).replace(/`/g, "&#096;");
 }

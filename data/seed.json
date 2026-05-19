@@ -2,564 +2,749 @@
   "meta": {
     "siteTitleZh": "港股打新资金接力日历",
     "siteTitleEn": "HK IPO Turnover Calendar",
-    "timezone": "Asia/Shanghai",
-    "coverageLabel": "2026-05-05 to 2026-06-02",
-    "fetchedAt": "2026-05-05T17:39:00+08:00",
+    "timezone": "Asia/Hong_Kong",
+    "coverageStart": "2026-05-19",
+    "coverageEnd": "2026-06-18",
+    "asOfDate": "2026-05-19",
+    "asOfTime": "22:30",
+    "fetchedAt": "2026-05-19T22:41:21+08:00",
+    "runDate": "2026-05-19",
     "dataStatus": "verified-refresh",
-    "nonAdviceZh": "公开信息整理，不构成投资建议。券商退款到账时点可能不同，未核验字段均按待核实处理。",
-    "nonAdviceEn": "Public information only, not investment advice. Broker refund posting can differ; unverified fields are marked pending."
+    "coverageLabel": "2026-05-19 to 2026-06-18",
+    "nextRefreshLocal": "每天 12:00 HKT",
+    "sourcePriority": "HKEX/prospectus > company announcement > broker > media",
+    "unresolvedPolicy": "Unverified fields stay marked pending; no guessed fill-ins.",
+    "nonAdviceZh": "公开信息整理，不构成投资建议。评分是资金效率与事件风险排序，不是买卖指令。券商退款到账时点可能不同，未核验字段均按待核实处理。",
+    "nonAdviceEn": "Public information only, not investment advice. Scores rank cash efficiency and event risk, not buy/sell instructions. Broker refund posting can differ; unverified fields are marked pending.",
+    "generatedBy": "scripts/fetch-hkipo.mjs"
   },
-  "days": [
-    [
-      "04-24",
-      "Fri"
-    ],
-    [
-      "04-27",
-      "Mon"
-    ],
-    [
-      "04-28",
-      "Tue"
-    ],
-    [
-      "04-29",
-      "Wed"
-    ],
-    [
-      "04-30",
-      "Thu"
-    ],
-    [
-      "05-04",
-      "Mon"
-    ],
-    [
-      "05-05",
-      "Tue"
-    ],
-    [
-      "05-06",
-      "Wed"
-    ],
-    [
-      "05-07",
-      "Thu"
-    ],
-    [
-      "05-08",
-      "Fri"
-    ],
-    [
-      "05-11",
-      "Mon"
-    ],
-    [
-      "05-12",
-      "Tue"
-    ],
-    [
-      "05-13",
-      "Wed"
-    ],
-    [
-      "05-14",
-      "Thu"
-    ],
-    [
-      "05-15",
-      "Fri"
-    ],
-    [
-      "05-18",
-      "Mon"
-    ],
-    [
-      "05-19",
-      "Tue"
-    ],
-    [
-      "05-20",
-      "Wed"
-    ],
-    [
-      "05-21",
-      "Thu"
-    ],
-    [
-      "05-22",
-      "Fri"
-    ],
-    [
-      "05-26",
-      "Tue"
-    ],
-    [
-      "05-27",
-      "Wed"
-    ],
-    [
-      "05-28",
-      "Thu"
-    ],
-    [
-      "05-29",
-      "Fri"
-    ],
-    [
-      "06-01",
-      "Mon"
-    ],
-    [
-      "06-02",
-      "Tue"
-    ],
-    [
-      "06-03",
-      "Wed"
-    ],
-    [
-      "06-04",
-      "Thu"
-    ],
-    [
-      "06-05",
-      "Fri"
-    ],
-    [
-      "06-08",
-      "Mon"
-    ]
+  "holidays": [
+    {
+      "date": "2026-05-25",
+      "nameZh": "佛诞翌日公众假期",
+      "nameEn": "The day following the Birthday of the Buddha"
+    }
   ],
-  "stocks": [
+  "decision": {
+    "headlineZh": "今晚之后，真正可执行的是 00901 / 02723 / 03310 三选一或分仓；06872 已过官方打款截止。",
+    "headlineEn": "After tonight, the actionable window is the 00901 / 02723 / 03310 same-window decision; 06872 has passed the official payment cut-off.",
+    "bodyZh": "5月20日中午是 DBS 口径的三只同窗券商截止，5月21日中午是官方公开发售缴款截止。1511/7688 的退款若在 5月20日上午入账，可以小心接力三只同窗；未显示可用现金前不能算。06872 资金要等 5月22日退款，不能接 5月21日这波。",
+    "bodyEn": "DBS shows the same-window broker cut-off for 00901/02723/03310 at noon on May 20, while official public-offer payment closes at noon on May 21. 1511/7688 refunds can only relay into that window if usable cash appears before noon on May 20. 06872 cash returns on May 22 and cannot fund the May 21 wave."
+  },
+  "scoreWindow": {
+    "start": "2026-05-19",
+    "end": "2026-06-02",
+    "ruleZh": "未来 10 个港股交易日内的标的全部给出 1-5 分；窗口外只保留灰区观察。",
+    "ruleEn": "All names inside the next 10 Hong Kong trading days receive a 1-5 score; names outside the window stay in grey watch mode."
+  },
+  "ipos": [
     {
-      "code": "01609",
-      "nameZh": "天星医疗",
-      "nameEn": "Star Sports Medicine",
-      "industry": "medical",
-      "state": "listed",
-      "score": 3,
-      "actionZh": "已上市，不追高",
-      "actionEn": "Listed, do not chase",
-      "start": 0,
-      "end": 6,
-      "bar": "closed",
-      "money": "HK$4,975",
-      "lot": "HK$4,975",
-      "tip": "Listed on 2026-05-05. Use as heat reference only. HKEX allotment warned about concentrated shareholding.",
-      "marks": [
-        [
-          "L",
-          6
-        ]
+      "code": "01511",
+      "nameZh": "驭势科技",
+      "nameEn": "UISEE Tech",
+      "industryZh": "自动驾驶/应用软件",
+      "industryEn": "Autonomous driving / software",
+      "status": "to-list",
+      "statusZh": "已截止，明日上市",
+      "statusEn": "Closed, lists tomorrow",
+      "offerStart": "2026-05-12T09:00:00+08:00",
+      "brokerCutoff": "2026-05-14T12:00:00+08:00",
+      "officialCutoff": "2026-05-15T12:00:00+08:00",
+      "resultTime": "2026-05-19T23:00:00+08:00",
+      "refundDate": "2026-05-20",
+      "listingDate": "2026-05-20",
+      "greyMarket": "2026-05-19 16:15-18:30",
+      "price": "HK$60.30",
+      "boardLot": "50",
+      "entryFee": "HK$3,045.40",
+      "sponsor": "CICC / CITIC / others",
+      "score": 3.2,
+      "scoreLabelZh": "偏观察",
+      "scoreLabelEn": "Watch",
+      "actionZh": "等上市表现，不追开盘高位；退款若 20 日上午可用，可接三只同窗。",
+      "actionEn": "Wait for listing performance; do not chase. Refund can relay only if usable before May 20 noon.",
+      "scoreBreakdown": {
+        "schedule": 3,
+        "heat": 2.6,
+        "cash": 3.8,
+        "risk": 2.8
+      },
+      "thesisZh": [
+        "5月19日暗盘整体接近平开，热度低于同日 07688。",
+        "入场费低但上市前已无新申购价值，只保留退款接力价值。",
+        "若券商在 5月20日上午确认退款，可作为 00901/02723/03310 的补充资金。"
       ],
-      "scores": [
-        2.8,
-        2.4,
-        4.8,
-        2
-      ],
+      "capitalNoteZh": "5月20日退款为条件接力；到账时间未确认前按不可用处理。",
       "sourceRefs": [
-        "hkex-1609-allotment",
-        "sl886-list"
+        "dbs-ipo",
+        "aastocks-ipo",
+        "jpm-gray-0519"
       ]
     },
     {
-      "code": "01187",
-      "nameZh": "可孚医疗",
-      "nameEn": "Cofoe Medical",
-      "industry": "medical",
-      "state": "listed",
-      "score": 4,
-      "actionZh": "已上市，只核退款到账",
-      "actionEn": "Listed, verify refund posting",
-      "start": 1,
-      "end": 7,
-      "bar": "closed",
-      "money": "HK$3,973",
-      "lot": "HK$3,973",
-      "tip": "HKEX allotment result published 2026-05-05: final price HK$39.33, HK public offer 399.08x, 105,939 valid applications, 15,008 accepted, one-lot 100-share success about 5.0%. Refund posting hour remains broker-specific.",
-      "marks": [
-        [
-          "C",
-          4
-        ],
-        [
-          "R",
-          7
-        ],
-        [
-          "L",
-          7
-        ]
+      "code": "07688",
+      "nameZh": "拓璞数控",
+      "nameEn": "Top NC",
+      "industryZh": "工业机械/数控机床",
+      "industryEn": "Industrial machinery / CNC",
+      "status": "to-list",
+      "statusZh": "已截止，明日上市",
+      "statusEn": "Closed, lists tomorrow",
+      "offerStart": "2026-05-12T09:00:00+08:00",
+      "brokerCutoff": "2026-05-14T12:00:00+08:00",
+      "officialCutoff": "2026-05-15T12:00:00+08:00",
+      "resultTime": "2026-05-19T23:00:00+08:00",
+      "refundDate": "2026-05-20",
+      "listingDate": "2026-05-20",
+      "greyMarket": "2026-05-19 16:15-18:30",
+      "price": "HK$26.39",
+      "boardLot": "100",
+      "entryFee": "HK$2,665.61",
+      "sponsor": "CICC / Huatai / others",
+      "score": 4.4,
+      "scoreLabelZh": "已兑现强势",
+      "scoreLabelEn": "Strong delivered",
+      "actionZh": "新申购已结束；暗盘强，明日开盘只做纪律性观察，避免高开追价。",
+      "actionEn": "Subscription is closed. Grey market was strong; watch the open with discipline and avoid chasing spikes.",
+      "scoreBreakdown": {
+        "schedule": 3,
+        "heat": 4.6,
+        "cash": 4.3,
+        "risk": 3.8
+      },
+      "thesisZh": [
+        "5月19日暗盘收涨约 47.8%，短线热度确认。",
+        "每手入场费低，资金占用效率高。",
+        "上市当日波动会放大，不把暗盘涨幅直接外推成开盘买入信号。"
       ],
-      "scores": [
-        3.8,
-        3.8,
-        4.1,
-        3.5
-      ],
+      "capitalNoteZh": "5月20日退款可尝试接三只同窗，但必须以券商可用现金为准。",
       "sourceRefs": [
-        "hkex-1187-notice",
-        "hkex-1187-allotment"
+        "dbs-ipo",
+        "aastocks-ipo",
+        "jpm-gray-0519"
       ]
     },
     {
-      "code": "01236",
-      "nameZh": "乐动机器人",
-      "nameEn": "LDROBOT",
-      "industry": "robot",
-      "state": "open",
+      "code": "06872",
+      "nameZh": "丹诺医药-B",
+      "nameEn": "TenNor Therapeutics-B",
+      "industryZh": "生物医药-B",
+      "industryEn": "Biotech-B",
+      "status": "closed",
+      "statusZh": "已过官方截止，等结果/退款",
+      "statusEn": "Closed, waiting result/refund",
+      "offerStart": "2026-05-14T09:00:00+08:00",
+      "brokerCutoff": "2026-05-18T12:00:00+08:00",
+      "officialCutoff": "2026-05-19T12:00:00+08:00",
+      "resultTime": "2026-05-21T23:00:00+08:00",
+      "refundDate": "2026-05-22",
+      "listingDate": "2026-05-22",
+      "greyMarket": "2026-05-21 16:15-18:30",
+      "price": "HK$75.70",
+      "boardLot": "50",
+      "entryFee": "HK$3,823.17",
+      "sponsor": "CITIC Securities / ABCI",
       "score": 4,
-      "actionZh": "可打但别挤占5月8资金",
-      "actionEn": "Playable, preserve May 8 cash",
-      "start": 4,
-      "end": 10,
-      "bar": "warn",
-      "money": "HK$6,061",
-      "lot": "HK$6,061",
-      "tip": "Cut-off is 2026-05-06 12:00. Refund by 2026-05-11 means it cannot fund 07630/07666 before 2026-05-08 12:00.",
-      "marks": [
-        [
-          "S",
-          4
-        ],
-        [
-          "C",
-          7
-        ],
-        [
-          "A",
-          9
-        ],
-        [
-          "R",
-          10
-        ],
-        [
-          "L",
-          10
-        ]
+      "scoreLabelZh": "热度强但不可追缴",
+      "scoreLabelEn": "Strong heat, cut-off passed",
+      "actionZh": "今晚不再追加；等 5月21日配发与 5月22日退款/上市。",
+      "actionEn": "Do not add tonight. Wait for May 21 allotment and May 22 refund/listing.",
+      "scoreBreakdown": {
+        "schedule": 2.5,
+        "heat": 4.8,
+        "cash": 3.2,
+        "risk": 3.4
+      },
+      "thesisZh": [
+        "5月19日中午已结束官方缴款，晚间只保留结果观察。",
+        "市场消息称公开发售初步超购约 9,026 倍，热度很强。",
+        "资金要到 5月22日退款，不能拿去接 5月21日三只同窗。"
       ],
-      "scores": [
-        3.5,
-        3,
-        4.4,
-        2.4
-      ],
+      "capitalNoteZh": "不能接 00901/02723/03310；可用于 5月22日之后的新波次。",
       "sourceRefs": [
-        "hkex-1236-prospectus",
-        "hkex-1236-notice",
-        "sl886-1236"
+        "hkex-6872-announcement",
+        "dbs-ipo",
+        "jpm-gray-0519"
+      ]
+    },
+    {
+      "code": "02723",
+      "nameZh": "深演智能",
+      "nameEn": "DeepZero",
+      "industryZh": "AI营销/媒体",
+      "industryEn": "AI marketing / media",
+      "status": "open",
+      "statusZh": "申购中，同窗三选",
+      "statusEn": "Open, same-window decision",
+      "offerStart": "2026-05-18T09:00:00+08:00",
+      "brokerCutoff": "2026-05-20T12:00:00+08:00",
+      "officialCutoff": "2026-05-21T12:00:00+08:00",
+      "pricingDeadline": "2026-05-22T12:00:00+08:00",
+      "resultTime": "2026-05-26T23:00:00+08:00",
+      "refundDate": "2026-05-27",
+      "listingDate": "2026-05-27",
+      "greyMarket": "2026-05-26 16:15-18:30",
+      "price": "HK$43.50-55.50",
+      "boardLot": "100",
+      "entryFee": "HK$5,605.97",
+      "sponsor": "ICBC International",
+      "score": 3.8,
+      "scoreLabelZh": "题材强，控制手数",
+      "scoreLabelEn": "Strong theme, size carefully",
+      "actionZh": "三只同窗里优先看题材弹性，但每手占款最高，只适合有限资金中的小到中等仓位。",
+      "actionEn": "The best theme optionality in the same-window trio, but the highest entry fee. Use small-to-mid sizing.",
+      "scoreBreakdown": {
+        "schedule": 4,
+        "heat": 4.1,
+        "cash": 3,
+        "risk": 3.8
+      },
+      "thesisZh": [
+        "AI营销与企业智能体叙事最容易被短线资金理解。",
+        "价格区间而非固定价，若最终价低于最高价会有多缴款退回。",
+        "每手 5,605.97 港元，占款高；与 00901/03310 同窗互斥。"
+      ],
+      "capitalNoteZh": "5月20日券商截止优先；5月21日官方截止后资金锁到 5月27日。",
+      "sourceRefs": [
+        "hkex-2723-prospectus",
+        "dbs-ipo",
+        "etnet-2723",
+        "jrj-0519"
+      ]
+    },
+    {
+      "code": "03310",
+      "nameZh": "云英谷科技",
+      "nameEn": "Viewtrix Technology",
+      "industryZh": "半导体/显示驱动",
+      "industryEn": "Semiconductor / display driver",
+      "status": "open",
+      "statusZh": "申购中，同窗三选",
+      "statusEn": "Open, same-window decision",
+      "offerStart": "2026-05-18T09:00:00+08:00",
+      "brokerCutoff": "2026-05-20T12:00:00+08:00",
+      "officialCutoff": "2026-05-21T12:00:00+08:00",
+      "resultTime": "2026-05-26T23:00:00+08:00",
+      "refundDate": "2026-05-27",
+      "listingDate": "2026-05-27",
+      "greyMarket": "2026-05-26 16:15-18:30",
+      "price": "HK$20.81",
+      "boardLot": "200",
+      "entryFee": "HK$4,203.98",
+      "sponsor": "CICC / CITIC Securities",
+      "score": 3.6,
+      "scoreLabelZh": "中性偏可打",
+      "scoreLabelEn": "Neutral playable",
+      "actionZh": "半导体属性清晰，固定价减小退款不确定性；若只打一只，排在 02723 之后、00901 之前。",
+      "actionEn": "Clear semiconductor angle and fixed price. If choosing only one, rank after 02723 and before 00901.",
+      "scoreBreakdown": {
+        "schedule": 4,
+        "heat": 3.5,
+        "cash": 3.6,
+        "risk": 3.4
+      },
+      "thesisZh": [
+        "AMOLED 显示驱动芯片，硬科技辨识度高。",
+        "固定价 HK$20.81，每手 4,203.98 港元，资金效率中等。",
+        "行业周期与估值市值约 89 亿港元，需要克制评分。"
+      ],
+      "capitalNoteZh": "与 02723/00901 同窗；同一笔钱不能同时全额打三只。",
+      "sourceRefs": [
+        "hkex-3310-prospectus",
+        "dbs-ipo",
+        "etnet-3310",
+        "jrj-0519"
+      ]
+    },
+    {
+      "code": "00901",
+      "nameZh": "华曦达",
+      "nameEn": "SDMC",
+      "industryZh": "智慧家庭硬件/终端",
+      "industryEn": "Smart-home hardware",
+      "status": "open",
+      "statusZh": "申购中，同窗三选",
+      "statusEn": "Open, same-window decision",
+      "offerStart": "2026-05-18T09:00:00+08:00",
+      "brokerCutoff": "2026-05-20T12:00:00+08:00",
+      "officialCutoff": "2026-05-21T12:00:00+08:00",
+      "resultTime": "2026-05-26T23:00:00+08:00",
+      "refundDate": "2026-05-27",
+      "listingDate": "2026-05-27",
+      "greyMarket": "2026-05-26 16:15-18:30",
+      "price": "HK$32.80",
+      "boardLot": "100",
+      "entryFee": "HK$3,313.08",
+      "sponsor": "CSC International",
+      "score": 3.2,
+      "scoreLabelZh": "低占款备选",
+      "scoreLabelEn": "Low-cash alternative",
+      "actionZh": "适合作为低占款备选；题材弹性弱于 02723，产业估值吸引力弱于 03310。",
+      "actionEn": "A lower-cash alternative. Theme optionality is weaker than 02723 and hardware valuation appeal is weaker than 03310.",
+      "scoreBreakdown": {
+        "schedule": 4,
+        "heat": 2.9,
+        "cash": 4,
+        "risk": 2.9
+      },
+      "thesisZh": [
+        "每手 3,313.08 港元，三只同窗中资金门槛较低。",
+        "智慧家庭硬件以海外电信/零售客户为主，贸易与汇率风险较显性。",
+        "若市场孖展热度不足，优先级低于 02723/03310。"
+      ],
+      "capitalNoteZh": "低占款但仍与 02723/03310 同窗互斥。",
+      "sourceRefs": [
+        "dbs-ipo",
+        "etnet-0901",
+        "jrj-0519"
+      ]
+    },
+    {
+      "code": "06871",
+      "nameZh": "翼菲科技",
+      "nameEn": "Robotphoenix",
+      "industryZh": "工业机器人",
+      "industryEn": "Industrial robotics",
+      "status": "listed-reference",
+      "statusZh": "已上市，热度参考",
+      "statusEn": "Listed reference",
+      "offerStart": "2026-05-08T09:00:00+08:00",
+      "brokerCutoff": "2026-05-12T12:00:00+08:00",
+      "officialCutoff": "2026-05-13T12:00:00+08:00",
+      "resultTime": "2026-05-15T23:00:00+08:00",
+      "refundDate": "2026-05-18",
+      "listingDate": "2026-05-18",
+      "price": "HK$30.50",
+      "boardLot": "100",
+      "entryFee": "HK$3,080.75",
+      "score": 4.6,
+      "scoreLabelZh": "历史强样本",
+      "scoreLabelEn": "Strong reference",
+      "actionZh": "只做市场温度参照，不再给打新资金位。",
+      "actionEn": "Use as market-temperature reference only.",
+      "scoreBreakdown": {
+        "schedule": 1,
+        "heat": 5,
+        "cash": 4.4,
+        "risk": 4
+      },
+      "thesisZh": [
+        "公开发售超购约 14,800 倍，成为本轮机器人热度锚。",
+        "首日收涨约 76.2%，提高后续硬科技/机器人新股情绪。",
+        "已上市，不再占用未来一个月打新资金。"
+      ],
+      "capitalNoteZh": "退款/上市已完成，当前只做情绪锚。",
+      "sourceRefs": [
+        "dbs-ipo",
+        "etnet-6871",
+        "aastocks-06871"
+      ]
+    },
+    {
+      "code": "07666",
+      "nameZh": "剂泰科技-P",
+      "nameEn": "Metis TechBio-P",
+      "industryZh": "生物科技",
+      "industryEn": "Biotech",
+      "status": "listed-reference",
+      "statusZh": "已上市，半新股参考",
+      "statusEn": "Listed reference",
+      "offerStart": "2026-05-05T09:00:00+08:00",
+      "brokerCutoff": "2026-05-07T12:00:00+08:00",
+      "officialCutoff": "2026-05-08T12:00:00+08:00",
+      "resultTime": "2026-05-12T23:00:00+08:00",
+      "refundDate": "2026-05-13",
+      "listingDate": "2026-05-13",
+      "price": "已上市",
+      "boardLot": "-",
+      "entryFee": "-",
+      "score": null,
+      "scoreLabelZh": "窗口外",
+      "scoreLabelEn": "Outside window",
+      "actionZh": "只作为近期生物科技情绪参考。",
+      "actionEn": "Reference only.",
+      "scoreBreakdown": {
+        "schedule": 0,
+        "heat": 0,
+        "cash": 0,
+        "risk": 0
+      },
+      "thesisZh": [
+        "已完成上市与退款，对未来资金不构成占用。"
+      ],
+      "capitalNoteZh": "无未来资金占用。",
+      "sourceRefs": [
+        "dbs-ipo"
       ]
     },
     {
       "code": "07630",
       "nameZh": "英派药业-B",
       "nameEn": "IMPACT Therapeutics-B",
-      "industry": "biotech",
-      "state": "open",
-      "score": 3,
-      "actionZh": "轻打或观望",
-      "actionEn": "Small or watch",
-      "start": 6,
-      "end": 12,
-      "bar": "open",
-      "money": "HK$4,394",
-      "lot": "HK$4,394",
-      "tip": "Same cash window as 07666. Cut-off 2026-05-08 12:00. Heat and broker refund details pending.",
-      "marks": [
-        [
-          "S",
-          6
-        ],
-        [
-          "C",
-          9
-        ],
-        [
-          "A",
-          11
-        ],
-        [
-          "R",
-          12
-        ],
-        [
-          "L",
-          12
-        ]
+      "industryZh": "生物医药-B",
+      "industryEn": "Biotech-B",
+      "status": "listed-reference",
+      "statusZh": "已上市，半新股参考",
+      "statusEn": "Listed reference",
+      "offerStart": "2026-05-05T09:00:00+08:00",
+      "brokerCutoff": "2026-05-07T12:00:00+08:00",
+      "officialCutoff": "2026-05-08T12:00:00+08:00",
+      "resultTime": "2026-05-12T23:00:00+08:00",
+      "refundDate": "2026-05-13",
+      "listingDate": "2026-05-13",
+      "price": "HK$20.10",
+      "boardLot": "-",
+      "entryFee": "-",
+      "score": null,
+      "scoreLabelZh": "窗口外",
+      "scoreLabelEn": "Outside window",
+      "actionZh": "只作为近期高超购样本参考。",
+      "actionEn": "Reference only.",
+      "scoreBreakdown": {
+        "schedule": 0,
+        "heat": 0,
+        "cash": 0,
+        "risk": 0
+      },
+      "thesisZh": [
+        "此前公开发售超购超过 2,000 倍，说明生物科技热度并未消失。"
       ],
-      "scores": [
-        2.9,
-        2.6,
-        2.2,
-        3.2
-      ],
+      "capitalNoteZh": "无未来资金占用。",
       "sourceRefs": [
-        "hkex-7630-notice"
-      ]
-    },
-    {
-      "code": "07666",
-      "nameZh": "剂泰科技-P",
-      "nameEn": "METiS-P",
-      "industry": "biotech",
-      "state": "open",
-      "score": 4,
-      "actionZh": "进取首选，需独立现金",
-      "actionEn": "Aggressive first pick, needs separate cash",
-      "start": 6,
-      "end": 12,
-      "bar": "risk",
-      "money": "HK$5,303",
-      "lot": "HK$5,303",
-      "tip": "AI nano-material biotech. Cut-off 2026-05-08 12:00. Needs its own cash pool. MoneyDJ reported USD148m cornerstone demand.",
-      "marks": [
-        [
-          "S",
-          6
-        ],
-        [
-          "C",
-          9
-        ],
-        [
-          "A",
-          11
-        ],
-        [
-          "R",
-          12
-        ],
-        [
-          "L",
-          12
-        ]
-      ],
-      "scores": [
-        3.7,
-        2.8,
-        3.6,
-        3.3
-      ],
-      "sourceRefs": [
-        "hkex-7666-notice",
-        "hkex-7666-prospectus",
-        "moneydj-7666"
-      ]
-    },
-    {
-      "code": "FUTURE",
-      "nameZh": "未来未核验候选池",
-      "nameEn": "Unverified Future Pool",
-      "industry": "future",
-      "state": "watch",
-      "score": 0,
-      "actionZh": "灰色等待区",
-      "actionEn": "Grey waiting zone",
-      "start": 13,
-      "end": 29,
-      "bar": "future",
-      "money": "No verified open deal",
-      "lot": "Wait",
-      "tip": "This grey lane is intentionally visible so the website has a long-sight structure. New verified prospectuses will be inserted here by the next run.",
-      "marks": [],
-      "scores": [
-        0,
-        0,
-        0,
-        0
-      ],
-      "sourceRefs": [
-        "hkex-new-listings"
+        "dbs-ipo",
+        "impact-7630"
       ]
     }
   ],
-  "connectors": [
+  "conflicts": [
     {
-      "from": "01187",
-      "to": "01236",
-      "fromDay": 7,
-      "toDay": 7,
+      "type": "hard",
+      "titleZh": "06872 -> 00901/02723/03310",
+      "titleEn": "06872 -> 00901/02723/03310",
+      "verdictZh": "不可接力",
+      "verdictEn": "Not relayable",
+      "bodyZh": "06872 退款是 5月22日；三只同窗官方缴款 5月21日中午截止，券商更早到 5月20日中午。",
+      "bodyEn": "06872 refunds on May 22; the same-window trio closes officially at noon on May 21 and by DBS at noon on May 20."
+    },
+    {
       "type": "tight",
-      "label": "1187 refund to 1236 cutoff: broker hour pending"
+      "titleZh": "01511/07688 -> 三只同窗",
+      "titleEn": "01511/07688 -> Same-window trio",
+      "verdictZh": "只在上午到账时可接",
+      "verdictEn": "Only if posted before noon",
+      "bodyZh": "退款日期同为 5月20日；若券商上午未显示可用现金，不能赶 5月20日中午券商截止。",
+      "bodyEn": "Refund date is May 20. If the broker does not show usable cash before noon, it cannot catch the broker cut-off."
     },
     {
-      "from": "01187",
-      "to": "07666",
-      "fromDay": 7,
-      "toDay": 9,
-      "type": "good",
-      "label": "1187 refund to 07666 cutoff: usable only if cash posts"
-    },
-    {
-      "from": "01236",
-      "to": "07666",
-      "fromDay": 10,
-      "toDay": 9,
-      "type": "miss",
-      "label": "1236 refund after May 8 cutoff: missed"
-    },
-    {
-      "from": "07630",
-      "to": "07666",
-      "fromDay": 9,
-      "toDay": 9,
-      "type": "tight",
-      "label": "7630 and 7666 same window: split or choose"
+      "type": "same",
+      "titleZh": "00901 vs 02723 vs 03310",
+      "titleEn": "00901 vs 02723 vs 03310",
+      "verdictZh": "同窗互斥",
+      "verdictEn": "Same-window conflict",
+      "bodyZh": "三只同日截止、同日退款、同日上市。同一笔现金不能同时全额打三只，只能选择或分仓。",
+      "bodyEn": "Same cut-off, refund, and listing dates. One cash pool cannot fully fund all three."
     }
   ],
-  "dayEvents": [
-    [
-      "05-05 Tue",
-      "01609 listed; 01236 open; 07630 open; 07666 open",
-      "整理资金格，不撤已锁订单",
-      "追已上市1609"
-    ],
-    [
-      "05-06 Wed",
-      "01236 12:00 cut-off; 01187 listed/refund check; 01187 allotment: HK public 399.08x, one-lot about 5.0%",
-      "11:00前处理1236；只在1187退款到账后才视作可用现金",
-      "把1187未到账退款算作可用现金"
-    ],
-    [
-      "05-08 Fri",
-      "07630 12:00 cut-off; 07666 12:00 cut-off; 01236 allotment by 23:00",
-      "7666优先，7630轻仓或放弃",
-      "用同一笔现金同时满仓两只"
-    ],
-    [
-      "05-11 Mon",
-      "01236 listed and refund by this date",
-      "确认退款，不倒算回5月8",
-      "把1236退款拿去接已截止标的"
-    ],
-    [
-      "05-12 Tue",
-      "07630/07666 allotment by 23:00",
-      "看配发决定暗盘",
-      "配发前无依据加仓"
-    ],
-    [
-      "05-13 Wed",
-      "07630/07666 listed and refund by this date",
-      "确认退款，等待新招股",
-      "暗盘与上市混看"
-    ],
-    [
-      "05-14 to 06-02",
-      "No verified open subscription after current set",
-      "灰色等待，自动重拉",
-      "为填仓位寻找低质标的"
-    ]
+  "dailyNotes": [
+    {
+      "date": "2026-05-19",
+      "titleZh": "今晚状态",
+      "bodyZh": "06872 已过官方截止；1511/7688 暗盘完成；三只同窗仍可按官方口径到 5月21日中午，但券商口径优先看 5月20日中午。"
+    },
+    {
+      "date": "2026-05-20",
+      "titleZh": "最关键打款日",
+      "bodyZh": "DBS 对 00901/02723/03310 的网上申购截止为 12:00；1511/7688 同日上市和退款，接力必须看到券商可用现金。"
+    },
+    {
+      "date": "2026-05-21",
+      "titleZh": "官方截止/06872 配发",
+      "bodyZh": "00901/02723/03310 官方公开发售中午截止；06872 配发结果预计 23:00 前公布。"
+    },
+    {
+      "date": "2026-05-22",
+      "titleZh": "06872 退款/上市",
+      "bodyZh": "06872 退款和上市。该笔资金可进入后续灰区，但已经不能接 5月21日三只同窗。"
+    },
+    {
+      "date": "2026-05-26",
+      "titleZh": "三只同窗出结果",
+      "bodyZh": "00901/02723/03310 预计 23:00 前公布最终价、申购水平、配发结果；同日灰市。"
+    },
+    {
+      "date": "2026-05-27",
+      "titleZh": "三只同窗退款/上市",
+      "bodyZh": "00901/02723/03310 退款和上市，形成下一轮资金释放点。"
+    }
   ],
-  "refreshFields": [
-    [
-      "Refund",
-      "1187退款在富途、辉立、耀才、老虎、长桥的实际可用时点。",
-      "Actual usable-cash posting time for 1187 across brokers."
-    ],
-    [
-      "Heat",
-      "1236孖展倍数冲突：SL886 203.49x 与 Chief 857.82x。",
-      "1236 margin multiple conflict: SL886 203.49x vs Chief 857.82x."
-    ],
-    [
-      "Grey",
-      "披露易是否新增5月中下旬招股书。",
-      "Whether HKEX adds mid/late-May prospectuses."
-    ],
-    [
-      "Grey Market",
-      "1236、7630、7666暗盘平台与起止时刻。",
-      "Grey market platforms and timing for 1236, 7630, 07666."
-    ]
+  "watchlist": [
+    {
+      "date": "2026-05-28",
+      "labelZh": "灰区：等待披露易新增招股书",
+      "labelEn": "Grey zone: wait for new HKEX prospectuses"
+    },
+    {
+      "date": "2026-06-02",
+      "labelZh": "灰区：若无新股，页面仍中午更新核验时刻",
+      "labelEn": "Grey zone: if no new deal, the page still updates verification time at noon"
+    },
+    {
+      "date": "2026-06-18",
+      "labelZh": "一个月视野结束",
+      "labelEn": "One-month horizon ends"
+    }
+  ],
+  "methodology": [
+    {
+      "nameZh": "日程可执行性",
+      "weight": "30%",
+      "bodyZh": "券商截止、官方截止、退款和上市是否允许资金接力。"
+    },
+    {
+      "nameZh": "题材/热度",
+      "weight": "25%",
+      "bodyZh": "同业短线偏好、暗盘/超购/近期同类首日表现。"
+    },
+    {
+      "nameZh": "资金效率",
+      "weight": "25%",
+      "bodyZh": "每手入场费、锁资天数、同窗互斥程度。"
+    },
+    {
+      "nameZh": "兑现风险",
+      "weight": "20%",
+      "bodyZh": "价格区间、行业估值、基本面波动、上市日追价风险。"
+    }
   ],
   "sources": [
     {
-      "id": "hkex-new-listings",
-      "name": "HKEX New Listing Information",
+      "id": "dbs-ipo",
+      "name": "DBS IPO Shares Subscription Service",
       "priority": 1,
-      "url": "https://www2.hkexnews.hk/New-Listings/New-Listing-Information/Main-Board?sc_lang=zh-HK"
+      "url": "https://www.hk.dbs.com/ecportalweb/ipo/IPO.aspx?Lang=en-us"
     },
     {
-      "id": "hkex-new-securities",
-      "name": "HKEX Newly Listed Securities",
+      "id": "hkex-3310-prospectus",
+      "name": "HKEX 03310 Viewtrix prospectus",
       "priority": 1,
-      "url": "https://www.hkex.com.hk/Services/Trading/Securities/Trading-News/Newly-Listed-Securities?sc_lang=zh-HK"
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0518/2026051800022_c.pdf"
     },
     {
-      "id": "hkex-1236-prospectus",
-      "name": "HKEX 01236 Prospectus",
+      "id": "hkex-2723-prospectus",
+      "name": "HKEX 02723 DeepZero prospectus",
       "priority": 1,
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0430/2026043000100_c.pdf"
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0518/2026051800024_c.pdf"
     },
     {
-      "id": "hkex-1236-notice",
-      "name": "HKEX 01236 Formal Notice",
+      "id": "hkex-6872-announcement",
+      "name": "HKEX 06872 TenNor global offering announcement",
       "priority": 1,
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0430/2026043000028_c.pdf"
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0514/2026051400003.pdf"
     },
     {
-      "id": "hkex-7630-notice",
-      "name": "HKEX 07630 Formal Notice",
-      "priority": 1,
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0505/2026050500002_c.pdf"
+      "id": "etnet-3310",
+      "name": "etnet 03310 IPO info",
+      "priority": 2,
+      "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=3310"
     },
     {
-      "id": "hkex-7666-notice",
-      "name": "HKEX 07666 Formal Notice",
-      "priority": 1,
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0505/2026050500006_c.pdf"
+      "id": "etnet-2723",
+      "name": "etnet 02723 IPO info",
+      "priority": 2,
+      "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=2723"
     },
     {
-      "id": "hkex-7666-prospectus",
-      "name": "HKEX 07666 Prospectus",
-      "priority": 1,
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0505/2026050500020_c.pdf"
+      "id": "etnet-0901",
+      "name": "etnet 00901 IPO info",
+      "priority": 2,
+      "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=901"
     },
     {
-      "id": "hkex-1187-notice",
-      "name": "HKEX 01187 Formal Notice",
-      "priority": 1,
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0427/2026042700004_c.pdf"
+      "id": "aastocks-ipo",
+      "name": "AASTOCKS IPO Plus",
+      "priority": 2,
+      "url": "https://www.aastocks.com/en/stocks/market/ipo/upcomingipo/company-news?symbol=02621"
     },
     {
-      "id": "hkex-1187-allotment",
-      "name": "HKEX 01187 Allotment Result",
-      "priority": 1,
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0505/2026050501943_c.pdf"
-    },
-    {
-      "id": "hkex-1609-allotment",
-      "name": "HKEX 01609 Allotment Result",
-      "priority": 1,
-      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0504/2026050403729_c.pdf"
-    },
-    {
-      "id": "sl886-list",
-      "name": "SL886 IPO List",
+      "id": "jpm-gray-0519",
+      "name": "JPM/AASTOCKS May 19 grey-market news feed",
       "priority": 3,
-      "url": "https://www.sl886.com/ipo/index?page=106&q=%2Fipo%2Findex&sort=-ApplyEndTime"
+      "url": "https://jpmhkwarrants.com/en_hk/ajax/newsfeed-result/newsID/40365/scategory/hongkong/page/"
     },
     {
-      "id": "sl886-1236",
-      "name": "SL886 01236 Detail",
+      "id": "jrj-0519",
+      "name": "JRJ May 19 HK IPO activity note",
       "priority": 3,
-      "url": "https://www.sl886.com/ipo/01236"
+      "url": "https://24h.jrj.com.cn/2026/05/19063257133355.shtml"
     },
     {
-      "id": "moneydj-7666",
-      "name": "MoneyDJ 07666",
-      "priority": 3,
-      "url": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=e850ee9b-ca8f-4b23-922f-c0323cb32fe3"
-    },
-    {
-      "id": "govhk-holidays",
-      "name": "GovHK 2026 Holidays",
-      "priority": 1,
+      "id": "govhk-2026-holiday",
+      "name": "GovHK 2026 public holidays",
+      "priority": 2,
       "url": "https://www.gov.hk/en/about/abouthk/holiday/2026.htm"
     }
-  ]
+  ],
+  "sourceChecks": [
+    {
+      "id": "dbs-ipo",
+      "name": "DBS IPO Shares Subscription Service",
+      "priority": 1,
+      "url": "https://www.hk.dbs.com/ecportalweb/ipo/IPO.aspx?Lang=en-us",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 46459,
+      "elapsedMs": 573,
+      "error": null
+    },
+    {
+      "id": "hkex-3310-prospectus",
+      "name": "HKEX 03310 Viewtrix prospectus",
+      "priority": 1,
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0518/2026051800022_c.pdf",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "application/pdf",
+      "bytes": 4845315,
+      "elapsedMs": 1080,
+      "error": null
+    },
+    {
+      "id": "hkex-2723-prospectus",
+      "name": "HKEX 02723 DeepZero prospectus",
+      "priority": 1,
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0518/2026051800024_c.pdf",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "application/pdf",
+      "bytes": 8429791,
+      "elapsedMs": 1115,
+      "error": null
+    },
+    {
+      "id": "hkex-6872-announcement",
+      "name": "HKEX 06872 TenNor global offering announcement",
+      "priority": 1,
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0514/2026051400003.pdf",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "application/pdf",
+      "bytes": 198424,
+      "elapsedMs": 1028,
+      "error": null
+    },
+    {
+      "id": "etnet-3310",
+      "name": "etnet 03310 IPO info",
+      "priority": 2,
+      "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=3310",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "bytes": 412400,
+      "elapsedMs": 1534,
+      "error": null
+    },
+    {
+      "id": "etnet-2723",
+      "name": "etnet 02723 IPO info",
+      "priority": 2,
+      "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=2723",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "bytes": 409879,
+      "elapsedMs": 1515,
+      "error": null
+    },
+    {
+      "id": "etnet-0901",
+      "name": "etnet 00901 IPO info",
+      "priority": 2,
+      "url": "https://www.etnet.com.hk/www/tc/stocks/ipo-info.php?code=901",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "bytes": 413388,
+      "elapsedMs": 1043,
+      "error": null
+    },
+    {
+      "id": "aastocks-ipo",
+      "name": "AASTOCKS IPO Plus",
+      "priority": 2,
+      "url": "https://www.aastocks.com/en/stocks/market/ipo/upcomingipo/company-news?symbol=02621",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 187486,
+      "elapsedMs": 800,
+      "error": null
+    },
+    {
+      "id": "jpm-gray-0519",
+      "name": "JPM/AASTOCKS May 19 grey-market news feed",
+      "priority": 3,
+      "url": "https://jpmhkwarrants.com/en_hk/ajax/newsfeed-result/newsID/40365/scategory/hongkong/page/",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "bytes": 32352,
+      "elapsedMs": 5970,
+      "error": null
+    },
+    {
+      "id": "jrj-0519",
+      "name": "JRJ May 19 HK IPO activity note",
+      "priority": 3,
+      "url": "https://24h.jrj.com.cn/2026/05/19063257133355.shtml",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 23067,
+      "elapsedMs": 107,
+      "error": null
+    },
+    {
+      "id": "govhk-2026-holiday",
+      "name": "GovHK 2026 public holidays",
+      "priority": 2,
+      "url": "https://www.gov.hk/en/about/abouthk/holiday/2026.htm",
+      "fetchedAt": "2026-05-19T22:41:21+08:00",
+      "ok": true,
+      "status": "verified",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=UTF-8",
+      "bytes": 85362,
+      "elapsedMs": 466,
+      "error": null
+    }
+  ],
+  "audit": {
+    "sourceCount": 11,
+    "okSourceCount": 11,
+    "failedSourceCount": 0,
+    "fetchedAt": "2026-05-19T22:41:21+08:00"
+  },
+  "discoveredOfficialLinks": []
 }
